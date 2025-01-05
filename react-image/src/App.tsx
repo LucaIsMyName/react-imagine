@@ -9,7 +9,7 @@ import EditArea from "./components/EditArea/EditArea";
 import ImageArea from "./components/ImageArea/ImageArea";
 if (typeof window !== 'undefined') {
   scan({
-    enabled: true,
+    enabled: false,
     log: false, // logs render info to console (default: false)
   });
 }
