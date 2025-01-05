@@ -11,7 +11,7 @@ const Slider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, R
     <SliderPrimitive.Track className="relative h-0.5 w-full grow overflow-hidden rounded-full bg-muted-foreground/30">
       <SliderPrimitive.Range className="absolute h-full bg-transparent shadow bg-muted-foreground/15" />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className="block w-3 lg:h-4 h-3 lg:w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
+    <SliderPrimitive.Thumb className="block w-3 lg:h-4 h-3 lg:w-4 rounded-full border-2 border-muted-foreground/30 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:border-foreground hover:shadow-lg" />
   </SliderPrimitive.Root>
 ));
 Slider.displayName = SliderPrimitive.Root.displayName;

@@ -1,4 +1,5 @@
 // src/App.tsx
+import { scan } from 'react-scan'; // import this BEFORE react
 import React from "react";
 import { Settings2 } from "lucide-react";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -6,7 +7,12 @@ import { EditorProvider } from "./contexts/EditorContext";
 import GlobalSettings from "./components/GlobalSettings/GlobalSettings";
 import EditArea from "./components/EditArea/EditArea";
 import ImageArea from "./components/ImageArea/ImageArea";
-
+if (typeof window !== 'undefined') {
+  scan({
+    enabled: true,
+    log: false, // logs render info to console (default: false)
+  });
+}
 const App: React.FC = () => {
   return (
     <ThemeProvider>

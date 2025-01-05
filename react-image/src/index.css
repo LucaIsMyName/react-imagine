@@ -66,6 +66,15 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  *::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  * {
+    transition: color 0.1s, background-color 0.1s, fill 0.1s, stroke 0.1s;
+  }
 }
  
 @layer base {
