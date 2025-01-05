@@ -1,116 +1,72 @@
 // src/contexts/EditorContext.tsx
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 
 export interface FilterSettings {
   brightness: number;
   contrast: number;
   saturation: number;
-  exposure: number;
   highlights: number;
   shadows: number;
-  whites: number;
-  blacks: number;
-  clarity: number;
-  vibrance: number;
-  temperature: number;
-  tint: number;
+  artStyle: "none" | "cubism" | "modern" | "abstract" | "pointillism" | "renaissance";
 }
 
 interface EditorState {
   image: string | null;
   filterSettings: FilterSettings;
-  preset: string | null;
-  history: FilterSettings[];
-  historyIndex: number;
 }
 
-type EditorAction =
-  | { type: 'SET_IMAGE'; payload: string }
-  | { type: 'UPDATE_FILTER'; payload: Partial<FilterSettings> }
-  | { type: 'APPLY_PRESET'; payload: string }
-  | { type: 'UNDO' }
-  | { type: 'REDO' }
-  | { type: 'RESET_FILTERS' };
+type EditorAction = { type: "SET_IMAGE"; payload: string } | { type: "UPDATE_FILTER"; payload: Partial<FilterSettings> } | { type: "RESET_FILTERS" } | { type: "LOAD_SAVED_STATE"; payload: EditorState };
 
 const defaultFilterSettings: FilterSettings = {
   brightness: 0,
   contrast: 0,
   saturation: 0,
-  exposure: 0,
   highlights: 0,
   shadows: 0,
-  whites: 0,
-  blacks: 0,
-  clarity: 0,
-  vibrance: 0,
-  temperature: 0,
-  tint: 0,
+  artStyle: "none",
 };
 
-const initialState: EditorState = {
-  image: null,
-  filterSettings: defaultFilterSettings,
-  preset: null,
-  history: [defaultFilterSettings],
-  historyIndex: 0,
+// Get initial state from localStorage or use default
+const getInitialState = (): EditorState => {
+  const savedState = localStorage.getItem("editorState");
+  if (savedState) {
+    try {
+      return JSON.parse(savedState);
+    } catch (e) {
+      console.error("Failed to parse saved state:", e);
+    }
+  }
+  return {
+    image: null,
+    filterSettings: defaultFilterSettings,
+  };
 };
 
 const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
   switch (action.type) {
-    case 'SET_IMAGE':
+    case "SET_IMAGE":
       return {
         ...state,
         image: action.payload,
-        filterSettings: defaultFilterSettings,
-        history: [defaultFilterSettings],
-        historyIndex: 0,
       };
-    
-    case 'UPDATE_FILTER':
-      const newSettings = {
-        ...state.filterSettings,
-        ...action.payload,
-      };
-      
-      const newHistory = [
-        ...state.history.slice(0, state.historyIndex + 1),
-        newSettings,
-      ];
 
+    case "UPDATE_FILTER":
       return {
         ...state,
-        filterSettings: newSettings,
-        history: newHistory,
-        historyIndex: newHistory.length - 1,
+        filterSettings: {
+          ...state.filterSettings,
+          ...action.payload,
+        },
       };
 
-    case 'RESET_FILTERS':
+    case "RESET_FILTERS":
       return {
         ...state,
         filterSettings: defaultFilterSettings,
-        history: [...state.history, defaultFilterSettings],
-        historyIndex: state.history.length,
       };
 
-    case 'UNDO':
-      if (state.historyIndex > 0) {
-        return {
-          ...state,
-          filterSettings: state.history[state.historyIndex - 1],
-          historyIndex: state.historyIndex - 1,
-        };
-      }
-      return state;
-
-    case 'REDO':
-      if (state.historyIndex < state.history.length - 1) {
-        return {
-          ...state,
-          filterSettings: state.history[state.historyIndex + 1],
-          historyIndex: state.historyIndex + 1,
-        };
-      }
-      return state;
+    case "LOAD_SAVED_STATE":
+      return action.payload;
 
     default:
       return state;
@@ -123,26 +79,20 @@ const EditorContext = createContext<{
 } | null>(null);
 
 export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(editorReducer, initialState);
+  const [state, dispatch] = useReducer(editorReducer, getInitialState());
 
-  // Save filter settings to localStorage
+  // Save state to localStorage whenever it changes
   useEffect(() => {
-    if (state.filterSettings !== defaultFilterSettings) {
-      localStorage.setItem('filterSettings', JSON.stringify(state.filterSettings));
-    }
-  }, [state.filterSettings]);
+    localStorage.setItem("editorState", JSON.stringify(state));
+  }, [state]);
 
-  return (
-    <EditorContext.Provider value={{ state, dispatch }}>
-      {children}
-    </EditorContext.Provider>
-  );
+  return <EditorContext.Provider value={{ state, dispatch }}>{children}</EditorContext.Provider>;
 };
 
 export const useEditor = () => {
   const context = useContext(EditorContext);
   if (!context) {
-    throw new Error('useEditor must be used within an EditorProvider');
+    throw new Error("useEditor must be used within an EditorProvider");
   }
   return context;
 };
