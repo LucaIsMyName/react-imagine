@@ -1,7 +1,13 @@
 // src/components/ImageArea/ImageArea.tsx
 import React, { useEffect, useRef } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, Trash2 } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
+import { Button } from '@/components/ui/button';
+import { applyCubismEffect } from '@/lib/effects/cubism';
+import { applyPointillismEffect } from '@/lib/effects/pointillism';
+import { applyModernEffect } from '@/lib/effects/modern';
+import { applyAbstractEffect } from '@/lib/effects/abstract';
+import type { ArtEffect } from '@/lib/effects/types';
 
 const ImageArea: React.FC = () => {
   const { state, dispatch } = useEditor();
@@ -19,81 +25,59 @@ const ImageArea: React.FC = () => {
     }
   };
 
-  const applyCubismEffect = (
-    ctx: CanvasRenderingContext2D,
+  const handleDeleteImage = () => {
+    dispatch({ type: 'SET_IMAGE', payload: null });
+    dispatch({ type: 'RESET_FILTERS' });
+  };
+
+  const applyEffects = async (
+    ctx: CanvasRenderingContext2D, 
     img: HTMLImageElement,
-    width: number,
-    height: number
+    canvas: HTMLCanvasElement,
   ) => {
-    // Clear the canvas
-    ctx.clearRect(0, 0, width, height);
+    const { width, height } = canvas;
+    
+    // Create a temporary canvas for base filters
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const tempCtx = tempCanvas.getContext('2d');
+    
+    if (!tempCtx) return;
 
-    // Draw the original image first
-    ctx.drawImage(img, 0, 0, width, height);
+    // Apply base adjustments
+    tempCtx.filter = `
+      brightness(${100 + state.filterSettings.brightness}%)
+      contrast(${100 + state.filterSettings.contrast}%)
+      saturate(${100 + state.filterSettings.saturation}%)
+    `;
+    
+    tempCtx.drawImage(img, 0, 0, width, height);
 
-    // Parameters for the cubism effect
-    const minSize = 30;
-    const maxSize = 60;
-    const numShapes = 100;  // Number of geometric shapes to create
+    // Create a new image with the base filters applied
+    const filteredImg = new Image();
+    await new Promise((resolve) => {
+      filteredImg.onload = resolve;
+      filteredImg.src = tempCanvas.toDataURL();
+    });
 
-    // Create multiple geometric shapes
-    for (let i = 0; i < numShapes; i++) {
-      // Random position and size
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const size = minSize + Math.random() * (maxSize - minSize);
+    // Clear main canvas and reset any previous settings
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.filter = 'none';
+    
+    // Apply art style if selected
+    const effectMap: Record<string, ArtEffect> = {
+      cubism: applyCubismEffect,
+      pointillism: applyPointillismEffect,
+      modern: applyModernEffect,
+      abstract: applyAbstractEffect,
+    };
 
-      // Save the current state
-      ctx.save();
-
-      // Create a clipping path (triangle or polygon)
-      ctx.beginPath();
-      if (Math.random() > 0.5) {
-        // Triangle
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + size * Math.cos(Math.PI / 3), y + size * Math.sin(Math.PI / 3));
-        ctx.lineTo(x - size * Math.cos(Math.PI / 3), y + size * Math.sin(Math.PI / 3));
-      } else {
-        // Polygon
-        const sides = 4 + Math.floor(Math.random() * 3);
-        for (let j = 0; j < sides; j++) {
-          const angle = (j / sides) * Math.PI * 2;
-          const px = x + size * Math.cos(angle);
-          const py = y + size * Math.sin(angle);
-          if (j === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-      }
-      ctx.closePath();
-      ctx.clip();
-
-      // Slight offset for the image inside the shape
-      const offsetX = (Math.random() - 0.5) * 20;
-      const offsetY = (Math.random() - 0.5) * 20;
-
-      // Draw the image with a slight offset
-      ctx.drawImage(img, offsetX, offsetY, width, height);
-
-      // Restore the canvas state
-      ctx.restore();
-    }
-
-    // Add some edge definition
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < numShapes; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const size = minSize + Math.random() * (maxSize - minSize);
-
-      ctx.beginPath();
-      if (Math.random() > 0.5) {
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + size * Math.cos(Math.PI / 3), y + size * Math.sin(Math.PI / 3));
-        ctx.lineTo(x - size * Math.cos(Math.PI / 3), y + size * Math.sin(Math.PI / 3));
-      }
-      ctx.closePath();
-      ctx.stroke();
+    const selectedEffect = effectMap[state.filterSettings.artStyle];
+    if (selectedEffect) {
+      selectedEffect(ctx, filteredImg, width, height);
+    } else {
+      ctx.drawImage(filteredImg, 0, 0);
     }
   };
 
@@ -106,31 +90,16 @@ const ImageArea: React.FC = () => {
 
     const img = new Image();
     img.onload = () => {
-      // Set canvas size to match image
       canvas.width = img.width;
       canvas.height = img.height;
-
-      // Apply base filters using CSS filter
-      ctx.filter = `
-        brightness(${100 + state.filterSettings.brightness}%)
-        contrast(${100 + state.filterSettings.contrast}%)
-        saturate(${100 + state.filterSettings.saturation}%)
-      `;
-
-      // Apply art style if selected
-      if (state.filterSettings.artStyle === 'cubism') {
-        applyCubismEffect(ctx, img, canvas.width, canvas.height);
-      } else {
-        // Just draw the image normally with filters
-        ctx.drawImage(img, 0, 0);
-      }
+      applyEffects(ctx, img, canvas);
     };
     img.src = state.image;
   }, [state.image, state.filterSettings]);
 
   return (
     <div className="h-full w-full p-4 shadow-inner">
-      <div className="h-full w-full flex items-center justify-center border-2 border-dashed border-border rounded-lg">
+      <div className="h-full w-full flex items-center justify-center border-2 border-dashed border-border rounded-lg relative">
         {!state.image ? (
           <div className="text-center">
             <button
@@ -150,6 +119,15 @@ const ImageArea: React.FC = () => {
           </div>
         ) : (
           <div className="relative w-full h-full flex items-center justify-center">
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDeleteImage}
+              className="absolute top-2 right-2 z-10 flex items-center gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Delete Image</span>
+            </Button>
             <canvas
               ref={canvasRef}
               className="max-w-full max-h-full object-contain"

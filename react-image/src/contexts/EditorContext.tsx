@@ -48,6 +48,7 @@ const editorReducer = (state: EditorState, action: EditorAction): EditorState =>
       return {
         ...state,
         image: action.payload,
+        ...(action.payload === null && { filterSettings: defaultFilterSettings }),
       };
 
     case "UPDATE_FILTER":
