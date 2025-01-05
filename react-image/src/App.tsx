@@ -15,7 +15,7 @@ const App: React.FC = () => {
           <GlobalSettings />
           
           {/* Desktop Layout */}
-          <div className="hidden md:flex h-[calc(100vh-4rem)]">
+          <div className="hidden md:flex h-[calc(100vh-4rem)] mt-[68px]">
             {/* Sidebar */}
             <div className="w-80 h-full border-r border-border bg-card overflow-y-auto">
               <EditArea />
@@ -28,7 +28,7 @@ const App: React.FC = () => {
           </div>
 
           {/* Mobile Layout */}
-          <div className="md:hidden flex flex-col h-[calc(100vh-4rem)]">
+          <div className="md:hidden flex flex-col h-[calc(100vh-4rem)] mt-[68px]">
             {/* Main content area */}
             <div className="flex-1 overflow-y-auto">
               <ImageArea />

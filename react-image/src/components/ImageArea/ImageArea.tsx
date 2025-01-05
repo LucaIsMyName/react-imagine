@@ -19,7 +19,7 @@ const ImageArea: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full p-4">
+    <div className="h-full w-full p-4 shadow-inner">
       <div className="h-full w-full flex items-center justify-center border-2 border-dashed border-border rounded-lg">
         {!state.image ? (
           <div className="text-center">
