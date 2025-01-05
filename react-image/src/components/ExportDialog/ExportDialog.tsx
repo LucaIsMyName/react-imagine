@@ -206,46 +206,6 @@ const ExportDialog: React.FC = () => {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Format</label>
-            <Select
-              value={format}
-              onValueChange={setFormat}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {imageFormats.map((format) => (
-                  <SelectItem
-                    key={format.value}
-                    value={format.value}>
-                    {format.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Size</label>
-            <Select
-              value={size}
-              onValueChange={setSize}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(imageSizes).map(([key, size]) => (
-                  <SelectItem
-                    key={key}
-                    value={key}>
-                    {size.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
             <label className="text-sm font-medium">Filename</label>
             <Input
               value={filename}
@@ -253,6 +213,47 @@ const ExportDialog: React.FC = () => {
               placeholder="Enter filename"
             />
           </div>
+          <section className="flex gap-4">
+            <div className="space-y-2 flex-1">
+              <label className="text-sm font-medium">Format</label>
+              <Select
+                value={format}
+                onValueChange={setFormat}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {imageFormats.map((format) => (
+                    <SelectItem
+                      key={format.value}
+                      value={format.value}>
+                      {format.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2 flex-1">
+              <label className="text-sm font-medium">Size</label>
+              <Select
+                value={size}
+                onValueChange={setSize}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(imageSizes).map(([key, size]) => (
+                    <SelectItem
+                      key={key}
+                      value={key}>
+                      {size.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </section>
 
           <div className="flex gap-2 pt-4">
             <Button
