@@ -1,50 +1,178 @@
-# React + TypeScript + Vite
+# React Image Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive image editor built with React, TypeScript, and Tailwind CSS. Transform your images with artistic filters, basic adjustments, and preserve metadata - all in your browser with no server uploads required.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎨 Artistic filters (Cubism, Pointillism, Modern Art)
+- 📊 Basic image adjustments (brightness, contrast, saturation, etc.)
+- 🏷️ Metadata preservation and editing
+- 📱 Responsive design for desktop and mobile
+- 🌓 Dark/Light mode support
+- 💾 Local storage for session persistence
+- 🖼️ Multiple image input methods (upload, URL, file browser)
+- 📤 Export with custom sizes and formats
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-- Configure the top-level `parserOptions` property like this:
+### Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository:
+```bash
+git clone https://github.com/LucaIsMyName/react-imagine.git
+cd react-image
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## Project Structure
+
+```
+react-image/
+├── src/
+│   ├── components/
+│   │   ├── EditArea/           # Image editing controls
+│   │   ├── ImageArea/          # Main image display
+│   │   ├── GlobalSettings/     # App-wide settings
+│   │   └── ui/                 # Reusable UI components
+│   ├── contexts/
+│   │   ├── EditorContext.tsx   # Image editing state
+│   │   └── ThemeContext.tsx    # Theme management
+│   ├── lib/
+│   │   └── effects/           # Image processing effects
+│   ├── types/                 # TypeScript definitions
+│   └── styles/                # Global styles
+└── public/
+    └── fonts/                 # Local font files
+```
+
+## API Documentation
+
+### Context APIs
+
+#### EditorContext
+Manages the global state for image editing.
+
+```typescript
+interface EditorState {
+  image: string | null;
+  filterSettings: FilterSettings;
+  metadata: ImageMetadata;
+}
+
+interface FilterSettings {
+  brightness: number;     // Range: -100 to 100
+  contrast: number;       // Range: -100 to 100
+  saturation: number;     // Range: -100 to 100
+  highlights: number;     // Range: -100 to 100
+  shadows: number;        // Range: -100 to 100
+  artStyle: ArtStyle;     // 'none' | 'cubism' | 'pointillism' | 'modern' | 'abstract'
+}
+
+interface ImageMetadata {
+  title: string;
+  description: string;
+  copyright: string;
+  author: string;
+  keywords: string[];
+  dateCreated: string;
+  location: string;
+  altText: string;
+}
+```
+
+Actions:
+- `SET_IMAGE`: Set or clear the current image
+- `UPDATE_FILTER`: Update filter settings
+- `UPDATE_METADATA`: Update image metadata
+- `RESET_FILTERS`: Reset all filters to default values
+
+#### ThemeContext
+Manages the application theme.
+
+```typescript
+interface ThemeContextType {
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+}
+```
+
+### Art Effects API
+
+Art effects are implemented as functions with the following signature:
+```typescript
+type ArtEffect = (
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  width: number,
+  height: number
+) => void;
+```
+
+Available effects:
+- `applyCubismEffect`: Transforms image into cubist style
+- `applyPointillismEffect`: Creates pointillist effect
+- `applyModernEffect`: Applies modern art style
+- `applyAbstractEffect`: Creates abstract interpretation
+
+## Upcoming Features
+
+### Image Rotation
+- [ ] Add rotation controls
+  - Preset buttons for 90°, 180°, 270°
+  - Custom angle input (-360° to 360°)
+  - Preview during rotation
+  - Maintain aspect ratio
+  - Update canvas size accordingly
+
+### Image Cropping
+- [ ] Implement cropping functionality
+  - Interactive crop area selection
+  - Aspect ratio presets (16:9, 4:3, 1:1, etc.)
+  - Custom aspect ratio input
+  - Crop area resize handles
+  - Maintain original image quality
+  - Preview crop result
+
+### Additional TODOs
+- [ ] Add image resize functionality
+- [ ] Implement undo/redo history
+- [ ] Add keyboard shortcuts
+- [ ] Optimize performance for large images
+- [ ] Add more art filters
+- [ ] Implement batch processing
+- [ ] Add export presets
+- [ ] Improve mobile touch interactions
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -am 'Add new feature'`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
