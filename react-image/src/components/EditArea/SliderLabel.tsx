@@ -56,11 +56,11 @@ const SliderLabel: React.FC<SliderLabelProps> = ({ label, value, onChange, min =
   return (
     <label className="text-sm font-medium flex justify-between items-center gap-2">
       <p className="text-xs lg:text-sm">{label}</p>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-6 md:gap-1">
         <div className="flex flex-col">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={decrementValue}
             className="h-4 w-4 p-0 hover:bg-accent">
@@ -74,12 +74,12 @@ const SliderLabel: React.FC<SliderLabelProps> = ({ label, value, onChange, min =
           onBlur={handleInputBlur}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
-          className="w-10 h-7 px-0 text-xs font-mono text-center"
+          className="w-16 md:w-10 h-6 px-0 text-[12px] md:bg-background bg-muted/60 pointer-events-none md:pointer-events-auto font-mono text-center"
         />
         <div className="flex flex-col">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={incrementValue}
             className="h-4 w-4 p-0 hover:bg-accent">

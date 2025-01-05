@@ -103,14 +103,7 @@ export const Logo = ({ className, isWordmark }: LogoProps) => {
       xmlns="http://www.w3.org/2000/svg"
       width="32"
       height="32"
-      viewBox="0 0 32 32">
-      <rect
-        id="Rectangle_1"
-        data-name="Rectangle 1"
-        width="32"
-        height="32"
-        fill="silver"
-      />
+      viewBox="0 0 32 32" className={className}>
       <path
         id="Path_1"
         data-name="Path 1"
@@ -148,23 +141,25 @@ export const Logo = ({ className, isWordmark }: LogoProps) => {
         width="20"
         height="22"
         transform="translate(6 6)"
-        fill="#0000d1"
+        className="transition-all duration-300 ease-in-out"
+        fill={theme === "dark" ? "darkblue" : "skyblue"}
       />
       <circle
         id="Ellipse_1"
         data-name="Ellipse 1"
-        cx="5"
-        cy="5"
-        r="5"
-        transform="translate(8 8)"
-        fill="#ffe200"
+        cx={theme === "dark" ? "4" : "4"}
+        cy={theme === "dark" ? "4" : "4"}
+        className="transition-all duration-300 ease-in-out"
+        r={theme === "dark" ? "2" : "3"}
+        transform="translate(7 7)"
+        fill={theme === "dark" ? "lightgray" : "#FFD700"}
       />
       <path
         id="Path_5"
         data-name="Path 5"
         d="M6,22l8-10,4,5,8-7V22Z"
         transform="translate(0 6)"
-        fill="#0eaa0e"
+        fill={theme === "dark" ? "#008080" : "#3CB371"}
       />
     </svg>
   );

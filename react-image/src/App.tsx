@@ -36,11 +36,14 @@ const App: React.FC = () => {
             </div>
 
             {/* Bottom sheet / Drawer */}
-            <details className="group fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-lg backdrop-saturate-200 border-t border-border">
-              <summary className="list-none p-4 cursor-pointer hover:bg-accent">
+            <details className="group fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-lg backdrop-saturate-200 border-t border-border">
+              <summary className="list-none p-4 cursor-pointer hover:bg-background/10 hover:bg-gradient-to-b from-muted-foreground/[0.025] to-transparent">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-xs">Edit Image</span>
-                  <Settings2 strokeWidth={2.5} className="size-4 text-foreground/50" />
+                  <Settings2
+                    strokeWidth={2}
+                    className="size-4 text-foreground"
+                  />
                 </div>
               </summary>
               <div className=" max-h-[70vh] overflow-y-auto">

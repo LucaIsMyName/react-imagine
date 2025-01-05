@@ -49,7 +49,7 @@ const GlobalSettings: React.FC = () => {
               onClick={toggleTheme}
               variant="outline"
               className="px-3">
-              {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
           </div>
         </div>

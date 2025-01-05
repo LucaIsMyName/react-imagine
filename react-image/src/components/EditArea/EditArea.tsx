@@ -126,12 +126,11 @@ const EditArea: React.FC = () => {
         <h2 className="text-lg font-semibold">Filters</h2>
         <div className="flex gap-2">
           <Button
-            variant="ghost"
-            size="sm"
+            variant="link"
             onClick={() => dispatch({ type: "RESET_FILTERS" })}
-            className="h-8 px-2">
+            className="flex items-center px-3 py-4">
+            <span className="block backdrop-blur-sm lg:block mr-2 text-[11px] lg:text-xs text-foreground/70 underline-none">Reset</span>
             <RotateCcw className="h-4 w-4 mr-0" />
-            <span className="sr-only">Reset</span>
           </Button>
           <ExportDialog />
         </div>

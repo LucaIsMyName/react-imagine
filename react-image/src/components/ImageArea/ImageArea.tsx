@@ -1,5 +1,5 @@
 // src/components/ImageArea/ImageArea.tsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { Upload, Download, Trash2, FolderOpen, Link } from "lucide-react";
 import { useEditor } from "../../contexts/EditorContext";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,17 @@ import { applyModernEffect } from "@/lib/effects/modern";
 import { applyAbstractEffect } from "@/lib/effects/abstract";
 import type { ArtEffect } from "@/lib/effects/types";
 
+
+const DEBOUNCE_DELAY = 300;
+
 const ImageArea: React.FC = () => {
   const { state, dispatch } = useEditor();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const timeoutRef = useRef<number>();
+  const lastImageRef = useRef<HTMLImageElement>();
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -32,10 +37,13 @@ const ImageArea: React.FC = () => {
     dispatch({ type: "RESET_FILTERS" });
   };
 
-  const applyEffects = async (ctx: CanvasRenderingContext2D, img: HTMLImageElement, canvas: HTMLCanvasElement) => {
+  const applyEffects = async (
+    ctx: CanvasRenderingContext2D, 
+    img: HTMLImageElement, 
+    canvas: HTMLCanvasElement
+  ) => {
     const { width, height } = canvas;
 
-    // Create a temporary canvas for base filters
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = width;
     tempCanvas.height = height;
@@ -43,7 +51,6 @@ const ImageArea: React.FC = () => {
 
     if (!tempCtx) return;
 
-    // Apply base adjustments
     tempCtx.filter = `
       brightness(${100 + state.filterSettings.brightness}%)
       contrast(${100 + state.filterSettings.contrast}%)
@@ -52,18 +59,15 @@ const ImageArea: React.FC = () => {
 
     tempCtx.drawImage(img, 0, 0, width, height);
 
-    // Create a new image with the base filters applied
     const filteredImg = new Image();
     await new Promise((resolve) => {
       filteredImg.onload = resolve;
       filteredImg.src = tempCanvas.toDataURL();
     });
 
-    // Clear main canvas and reset any previous settings
     ctx.globalCompositeOperation = "source-over";
     ctx.filter = "none";
 
-    // Apply art style if selected
     const effectMap: Record<string, ArtEffect> = {
       cubism: applyCubismEffect,
       pointillism: applyPointillismEffect,
@@ -79,6 +83,25 @@ const ImageArea: React.FC = () => {
     }
   };
 
+  const debouncedApplyEffects = useCallback(() => {
+    if (!state.image || !canvasRef.current || !lastImageRef.current) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Clear any pending timeouts
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+
+    // Set new timeout
+    timeoutRef.current = window.setTimeout(() => {
+      applyEffects(ctx, lastImageRef.current!, canvas);
+    }, DEBOUNCE_DELAY);
+  }, [state.filterSettings]);
+
+  // Initial image load
   useEffect(() => {
     if (!state.image || !canvasRef.current) return;
 
@@ -90,10 +113,23 @@ const ImageArea: React.FC = () => {
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
+      lastImageRef.current = img; // Store the image reference
       applyEffects(ctx, img, canvas);
     };
     img.src = state.image;
-  }, [state.image, state.filterSettings]);
+  }, [state.image]);
+
+  // Effect changes
+  useEffect(() => {
+    debouncedApplyEffects();
+
+    // Cleanup on unmount
+    return () => {
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [state.filterSettings, debouncedApplyEffects]);
 
   return (
     <div className="h-full w-full p-4 shadow-inner bg-muted/60">
