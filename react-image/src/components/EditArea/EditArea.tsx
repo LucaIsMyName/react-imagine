@@ -4,8 +4,10 @@ import { Slider } from "@/components/ui/slider";
 import { Select } from "@/components/ui/select";
 import { useEditor } from "../../contexts/EditorContext";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, CircleX as NoneIcon, Boxes as CubismIcon, Grip as PointillismIcon, BrickWall as ModernIcon, Eclipse as AbstractIcon, Paintbrush as RenaissanceIcon } from "lucide-react";
 import ExportDialog from "../ExportDialog/ExportDialog";
+import MetadataSection from "./MetadataSection";
+
 
 const EditArea: React.FC = () => {
   const { state, dispatch } = useEditor();
@@ -17,13 +19,69 @@ const EditArea: React.FC = () => {
     });
   };
 
+  const artIconClasses = `size-3 opacity-70 lg:size-4 ml-0.5`;
+
   const artStyles = [
-    { value: "none", label: "None" },
-    { value: "cubism", label: "Cubism" },
-    { value: "modern", label: "Modern" },
-    { value: "abstract", label: "Abstract" },
-    { value: "pointillism", label: "Pointillism" },
-    { value: "renaissance", label: "Renaissance" },
+    {
+      value: "none",
+      icon: (
+        <NoneIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "None",
+    },
+    {
+      value: "cubism",
+      icon: (
+        <CubismIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "Cubism",
+    },
+    {
+      value: "modern",
+      icon: (
+        <ModernIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "Modern",
+    },
+    {
+      value: "abstract",
+      icon: (
+        <AbstractIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "Abstract",
+    },
+    {
+      value: "pointillism",
+      icon: (
+        <PointillismIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "Pointillism",
+    },
+    {
+      value: "renaissance",
+      icon: (
+        <RenaissanceIcon
+          className={`${artIconClasses}`}
+          strokeWidth={1.5}
+        />
+      ),
+      label: "Renaissance",
+    },
   ];
 
   const handleArtStyleChange = (style: (typeof artStyles)[number]["value"]) => {
@@ -40,6 +98,23 @@ const EditArea: React.FC = () => {
       </div>
     );
   }
+
+
+  const handleMetadataChange = (update: Partial<ImageMetadata>) => {
+    dispatch({
+      type: "UPDATE_METADATA",
+      payload: update,
+    });
+  };
+
+  if (!state.image) {
+    return (
+      <div className="p-4 space-y-2">
+        <p className="text-muted-foreground text-sm">Upload an image to start editing</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="p-4 space-y-6 md:shadow-inner">
@@ -70,11 +145,13 @@ const EditArea: React.FC = () => {
                 variant={state.filterSettings.artStyle === style.value ? "outline" : "outline"}
                 onClick={() => handleArtStyleChange(style.value)}
                 className={`w-auto text-[10px] lg:text-[12px] rounded-full p-0 h-auto py-1 ${state.filterSettings.artStyle === style.value ? "bg-foreground hover:bg-foreground-muted hover:text-background-muted text-background" : ""}`}>
-                <img
-                  src={`https://placehold.co/50`}
-                  alt={style.label}
-                  className={`w-4 lg:w-5 h-4 lg:h-5 rounded-full ml-1 mr-2 shadow-inner `}
-                />
+                {style.icon ? (
+                  <div className="px-1">{style.icon}</div>
+                ) : (
+                  <div className="px-1">
+                    <NoneIcon className={artIconClasses} />
+                  </div>
+                )}
                 <span className="mr-2">{style.label}</span>
               </Button>
             ))}
@@ -153,6 +230,10 @@ const EditArea: React.FC = () => {
             />
           </div>
         </div>
+        <MetadataSection
+          metadata={state.metadata}
+          onChange={handleMetadataChange}
+        />
       </div>
     </div>
   );
