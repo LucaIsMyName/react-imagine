@@ -1,8 +1,10 @@
 // src/components/ImageArea/ImageArea.tsx
 import React, { useEffect, useRef } from 'react';
-import { Upload, Trash2 } from 'lucide-react';
+import { Upload, Trash2, FolderOpen, Link } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
 import { Button } from '@/components/ui/button';
+import FileBrowserDialog from '../FileBrowser/FileBrowserDialog';
+import URLInputDialog from '../URLInput/URLInputDialog';
 import { applyCubismEffect } from '@/lib/effects/cubism';
 import { applyPointillismEffect } from '@/lib/effects/pointillism';
 import { applyModernEffect } from '@/lib/effects/modern';
@@ -99,16 +101,35 @@ const ImageArea: React.FC = () => {
 
   return (
     <div className="h-full w-full p-4 shadow-inner">
-      <div className="h-full w-full flex items-center justify-center border-2 border-dashed border-border rounded-lg relative">
+      <div className={`h-full w-full flex items-center justify-center ${!state.image ? "border-2 border-dashed border-border" :""} rounded-lg relative`}>
         {!state.image ? (
-          <div className="text-center">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="flex flex-col items-center gap-2 p-6 rounded-lg hover:bg-accent"
-            >
-              <Upload className="w-8 h-8" />
-              <span className="text-sm">Click to upload an image</span>
-            </button>
+          <div className="text-center space-y-6">
+            <div className="flex flex-col gap-4 items-center">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex flex-col items-center gap-2 p-6 rounded-lg hover:bg-accent"
+              >
+                <Upload className="w-8 h-8" />
+                <span className="text-sm">Upload image</span>
+              </button>
+              
+              <div className="flex gap-2">
+                <FileBrowserDialog>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <FolderOpen className="w-4 h-4" />
+                    Browse Files
+                  </Button>
+                </FileBrowserDialog>
+
+                <URLInputDialog>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Link className="w-4 h-4" />
+                    From URL
+                  </Button>
+                </URLInputDialog>
+              </div>
+            </div>
+
             <input
               type="file"
               ref={fileInputRef}
@@ -118,15 +139,15 @@ const ImageArea: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div className="relative w-full h-full md:flex md:items-center justify-center">
             <Button
               variant="destructive"
               size="sm"
               onClick={handleDeleteImage}
-              className="absolute top-2 right-2 z-10 flex items-center gap-2"
+              className="absolute px-3 top-0 right-0 z-10 flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
-              <span>Delete Image</span>
+              <span className='sr-only'>Delete Image</span>
             </Button>
             <canvas
               ref={canvasRef}

@@ -42,7 +42,7 @@ const EditArea: React.FC = () => {
   }
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 md:shadow-inner">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Adjustments</h2>
         <div className="flex gap-2">
@@ -61,17 +61,21 @@ const EditArea: React.FC = () => {
       {/* Basic Adjustments */}
       <div className="space-y-6">
         {/* Art Styles */}
-        <div className="space-y-2">
+        <div className="space-y-2 px-2 pt-1 pb-2 shadow-sm bg-background-muted rounded-lg border">
           <label className="text-sm font-medium">Art Style</label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 flex-wrap">
             {artStyles.map((style) => (
               <Button
                 key={style.value}
-                variant={state.filterSettings.artStyle === style.value ? "default" : "outline"}
-                size="sm"
+                variant={state.filterSettings.artStyle === style.value ? "outline" : "outline"}
                 onClick={() => handleArtStyleChange(style.value)}
-                className="w-full">
-                {style.label}
+                className={`w-auto text-[11px] p-0 h-auto py-1 ${state.filterSettings.artStyle === style.value ? "bg-foreground hover:bg-foreground-muted hover:text-background-muted text-background" : ""}`}>
+                <img
+                  src={`https://placehold.co/50`}
+                  alt={style.label}
+                  className={`w-5 h-5 rounded-sm ml-1 mr-2 shadow-inner `}
+                />
+                <span className="mr-2">{style.label}</span>
               </Button>
             ))}
           </div>

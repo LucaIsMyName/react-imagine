@@ -81,16 +81,16 @@ const ExportDialog: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
+        <Button className="flex items-center gap-2 px-3">
           <Download className="w-4 h-4" />
-          Export
+          <span className='sr-only'>Export</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Export Image</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 py-4">
+        <div className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Format</label>
             <Select value={format} onValueChange={setFormat}>
@@ -132,11 +132,11 @@ const ExportDialog: React.FC = () => {
             />
           </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button onClick={() => handleExport(false)} className="flex-1">
+          <div className="flex flex-col md:flex-row gap-2 pt-4">
+            <Button onClick={() => handleExport(false)} className="block w-full md:w-auto flex-1">
               Download
             </Button>
-            <Button onClick={() => handleExport(true)} variant="outline" className="flex-1">
+            <Button onClick={() => handleExport(true)} variant="outline" className="block w-full md:w-auto flex-1">
               Export All Sizes
             </Button>
           </div>
