@@ -1,9 +1,10 @@
 {
   "name": "react-image",
   "private": true,
-  "version": "0.0.001",
+  "version": "0.0.002",
   "type": "module",
   "author": "LucaIsMyName",
+  "description": "A simple image viewer and editor written in React",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
