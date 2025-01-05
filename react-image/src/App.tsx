@@ -18,7 +18,7 @@ const App: React.FC = () => {
           {/* Desktop Layout */}
           <div className="hidden md:flex h-[calc(100vh-4rem)] mt-[68px]">
             {/* Sidebar */}
-            <div className="w-80 h-full border-r border-border bg-card overflow-y-auto">
+            <div className="w-full max-w-[clamp(240px,33vw,560px)] h-full border-r border-border bg-card overflow-y-auto">
               <EditArea />
             </div>
 
@@ -39,11 +39,11 @@ const App: React.FC = () => {
             <details className="group fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-lg backdrop-saturate-200 border-t border-border">
               <summary className="list-none p-4 cursor-pointer hover:bg-accent">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Edit Image</span>
-                  <Settings2 />
+                  <span className="font-medium text-xs">Edit Image</span>
+                  <Settings2 strokeWidth={2.5} className="size-4 text-foreground/50" />
                 </div>
               </summary>
-              <div className="p-4 max-h-[70vh] overflow-y-auto">
+              <div className=" max-h-[70vh] overflow-y-auto">
                 <EditArea />
               </div>
             </details>

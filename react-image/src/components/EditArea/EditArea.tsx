@@ -44,7 +44,7 @@ const EditArea: React.FC = () => {
   return (
     <div className="p-4 space-y-6 md:shadow-inner">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Adjustments</h2>
+        <h2 className="text-lg font-semibold">Filters</h2>
         <div className="flex gap-2">
           <Button
             variant="ghost"
@@ -69,11 +69,11 @@ const EditArea: React.FC = () => {
                 key={style.value}
                 variant={state.filterSettings.artStyle === style.value ? "outline" : "outline"}
                 onClick={() => handleArtStyleChange(style.value)}
-                className={`w-auto text-[11px] p-0 h-auto py-1 ${state.filterSettings.artStyle === style.value ? "bg-foreground hover:bg-foreground-muted hover:text-background-muted text-background" : ""}`}>
+                className={`w-auto text-[10px] lg:text-[12px] rounded-full p-0 h-auto py-1 ${state.filterSettings.artStyle === style.value ? "bg-foreground hover:bg-foreground-muted hover:text-background-muted text-background" : ""}`}>
                 <img
                   src={`https://placehold.co/50`}
                   alt={style.label}
-                  className={`w-5 h-5 rounded-sm ml-1 mr-2 shadow-inner `}
+                  className={`w-4 lg:w-5 h-4 lg:h-5 rounded-full ml-1 mr-2 shadow-inner `}
                 />
                 <span className="mr-2">{style.label}</span>
               </Button>
@@ -84,7 +84,10 @@ const EditArea: React.FC = () => {
         {/* Sliders */}
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Brightness: {state.filterSettings.brightness}</label>
+            <label className="text-sm font-medium flex justify-between items-center">
+              <p className="text-xs lg:text-sm">Brightness</p>
+              <p className="text-xs font-[400] px-1.5 py-0.5 border rounded">{state.filterSettings.brightness}</p>
+            </label>
             <Slider
               value={[state.filterSettings.brightness]}
               onValueChange={([value]) => handleFilterChange("brightness", value)}
@@ -95,7 +98,10 @@ const EditArea: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Contrast: {state.filterSettings.contrast}</label>
+            <label className="text-sm font-medium flex justify-between items-center">
+              <p className="text-xs lg:text-sm">Contrast</p>
+              <p className="text-xs font-[400] px-1.5 py-0.5 border rounded">{state.filterSettings.contrast}</p>
+            </label>
             <Slider
               value={[state.filterSettings.contrast]}
               onValueChange={([value]) => handleFilterChange("contrast", value)}
@@ -106,7 +112,10 @@ const EditArea: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Saturation: {state.filterSettings.saturation}</label>
+            <label className="text-sm font-medium flex justify-between items-center">
+              <p className="text-xs lg:text-sm">Saturation</p>
+              <p className="text-xs font-[400] px-1.5 py-0.5 border rounded">{state.filterSettings.saturation}</p>
+            </label>
             <Slider
               value={[state.filterSettings.saturation]}
               onValueChange={([value]) => handleFilterChange("saturation", value)}
@@ -117,7 +126,10 @@ const EditArea: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Highlights: {state.filterSettings.highlights}</label>
+            <label className="text-sm font-medium flex justify-between items-center">
+              <p className="text-xs lg:text-sm">Highlights</p>
+              <p className="text-xs font-[400] px-1.5 py-0.5 border rounded">{state.filterSettings.highlights}</p>
+            </label>
             <Slider
               value={[state.filterSettings.highlights]}
               onValueChange={([value]) => handleFilterChange("highlights", value)}
@@ -128,7 +140,10 @@ const EditArea: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Shadows: {state.filterSettings.shadows}</label>
+            <label className="text-sm font-medium flex justify-between items-center">
+              <p className="text-xs lg:text-sm">Shadows</p>
+              <p className="text-xs font-[400] px-1.5 py-0.5 border rounded">{state.filterSettings.shadows}</p>
+            </label>
             <Slider
               value={[state.filterSettings.shadows]}
               onValueChange={([value]) => handleFilterChange("shadows", value)}

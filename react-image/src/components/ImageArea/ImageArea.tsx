@@ -100,7 +100,7 @@ const ImageArea: React.FC = () => {
   }, [state.image, state.filterSettings]);
 
   return (
-    <div className="h-full w-full p-4 shadow-inner">
+    <div className="h-full w-full p-4 shadow-inner bg-muted/30">
       <div className={`h-full w-full flex items-center justify-center ${!state.image ? "border-2 border-dashed border-border" :""} rounded-lg relative`}>
         {!state.image ? (
           <div className="text-center space-y-6">
@@ -151,7 +151,7 @@ const ImageArea: React.FC = () => {
             </Button>
             <canvas
               ref={canvasRef}
-              className="max-w-full max-h-full object-contain"
+              className="max-w-full max-h-full object-contain shadow-lg border border-border"
             />
           </div>
         )}
