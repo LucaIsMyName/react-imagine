@@ -1,1 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#C0C0C0"></rect><path d="M0 0h32v1h-31v31h-1z" fill="#000000"></path><path d="M1 1h30v1h-29v29h-1z" fill="#808080"></path><path d="M31 0v32h-1v-31h-30v-1z" fill="#FFFFFF"></path><path d="M30 1v30h-1v-29h-28v-1z" fill="#DFDFDF"></path><rect x="4" y="4" width="24" height="20" fill="#FFFFFF"></rect><rect x="6" y="6" width="20" height="16" fill="#000080"></rect><circle cx="10" cy="10" r="3" fill="#FFFF00"></circle><path d="M6 22l8-10 4 5 8-7v6l-20 6z" fill="#008000"></path><rect x="28" y="28" width="3" height="3" fill="#808080"></rect></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_7" data-name="Rectangle 7" width="32" height="32" transform="translate(118 -104)" fill="none" stroke="#2f2f2f" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_1" data-name="Mask Group 1" transform="translate(-118 104)" clip-path="url(#clip-path)">
+    <g id="Rectangle_4" data-name="Rectangle 4" transform="translate(118 -104)" fill="none" stroke="#2f2f2f" stroke-width="1">
+      <rect width="32" height="32" stroke="none"/>
+      <rect x="0.5" y="0.5" width="31" height="31" fill="none"/>
+    </g>
+    <g id="Path_7" data-name="Path 7" transform="translate(118 -104)" fill="none">
+      <path d="M0,0H32L0,32Z" stroke="none"/>
+      <path d="M 1 1 L 1 29.58577919006348 L 29.58577919006348 1 L 1 1 M 0 0 L 32 0 L 0 32 L 0 0 Z" stroke="none" fill="#5c5c5c"/>
+    </g>
+    <g id="Path_8" data-name="Path 8" transform="translate(118 -104)" fill="none">
+      <path d="M0,0H0Z" stroke="none"/>
+      <path d="M 0 0 L 32 0 L 0 0 Z" stroke="none" fill="#cecece"/>
+    </g>
+    <line id="Line_1" data-name="Line 1" x2="33" transform="translate(117.5 -103.5)" fill="none" stroke="#939393" stroke-width="1"/>
+    <line id="Line_2" data-name="Line 2" x2="33" transform="translate(117.5 -72.5)" fill="none" stroke="#000" stroke-width="1"/>
+    <g id="Rectangle_5" data-name="Rectangle 5" transform="translate(119 -103)" fill="none" stroke="#e8e8e8" stroke-width="1.5">
+      <rect width="30" height="30" stroke="none"/>
+      <rect x="0.75" y="0.75" width="28.5" height="28.5" fill="none"/>
+    </g>
+    <g id="Path_9" data-name="Path 9" transform="translate(119 -103)" fill="none">
+      <path d="M0,0,30,30H0Z" stroke="none"/>
+      <path d="M 1.5 3.621320724487305 L 1.5 28.5 L 26.3786792755127 28.5 L 1.5 3.621320724487305 M 0 0 L 30 30 L 0 30 L 0 0 Z" stroke="none" fill="#d5d5d5"/>
+    </g>
+    <g id="Group_2" data-name="Group 2">
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="28" height="28" transform="translate(120 -102)" fill="#3eb5ff"/>
+      <circle id="Ellipse_2" data-name="Ellipse 2" cx="5" cy="5" r="5" transform="translate(122 -100)" fill="#fff726"/>
+      <path id="Path_10" data-name="Path 10" d="M120.569-73.81v-7.438l9.834-7.914,6.644,4.811L148.569-94.81v21Z" transform="translate(-0.569 -0.19)" fill="#70ff64"/>
+    </g>
+  </g>
+</svg>

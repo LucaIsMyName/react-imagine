@@ -1,7 +1,7 @@
 // src/contexts/DocWindowContext.tsx
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 
-type ContentType = "help" | "docs" | null;
+type ContentType = "help" | "docs" | "payment" | null;
 
 interface WindowPosition {
   x: number;

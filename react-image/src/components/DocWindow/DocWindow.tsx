@@ -42,7 +42,7 @@ export const DocWindow: React.FC = () => {
 
     const fetchContent = async () => {
       try {
-        const url = state.content === "help" ? "/docs/help.md" : "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/README.md";
+        const url = state.content === "help" ? "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/public/docs/support.md" : state.content === "payment" ? "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/public/docs/support.md" : "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/README.md";
         console.log("Fetching content from:", url);
 
         const response = await fetch(url);
