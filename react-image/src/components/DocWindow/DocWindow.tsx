@@ -42,7 +42,7 @@ export const DocWindow: React.FC = () => {
 
     const fetchContent = async () => {
       try {
-        const url = state.content === "help" ? "/docs/help.md" : "/docs/documentation.md";
+        const url = state.content === "help" ? "/docs/help.md" : "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/README.md";
         console.log("Fetching content from:", url);
 
         const response = await fetch(url);
@@ -256,6 +256,42 @@ export const DocWindow: React.FC = () => {
             img: ({ node, ...props }) => (
               <img
                 className="my-4"
+                {...props}
+              />
+            ),
+            table: ({ node, ...props }) => (
+              <table
+                className="table-auto my-4"
+                {...props}
+              />
+            ),
+            thead: ({ node, ...props }) => (
+              <thead
+                className="bg-muted/30"
+                {...props}
+              />
+            ),
+            tbody: ({ node, ...props }) => (
+              <tbody
+                className="divide-y divide-muted/30"
+                {...props}
+              />
+            ),
+            tr: ({ node, ...props }) => (
+              <tr
+                className="hover:bg-muted/30"
+                {...props}
+              />
+            ),
+            th: ({ node, ...props }) => (
+              <th
+                className="p-2"
+                {...props}
+              />
+            ),
+            td: ({ node, ...props }) => (
+              <td
+                className="p-2"
                 {...props}
               />
             ),

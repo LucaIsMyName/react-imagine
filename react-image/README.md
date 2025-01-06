@@ -1,23 +1,23 @@
 # React Imagine Editor
 
-A modern, responsive image editor built with React, TypeScript, and Tailwind CSS. Transform your images with artistic filters, basic adjustments, and preserve metadata - all in your browser with no server uploads required.
+A modern, responsive image editor built with React, TypeScript, and Tailwind CSS. Transform your images with artistic filters, basic adjustments, and preserve metadata * all in your browser with no server uploads required.
 
 ## Features
 
-- 🎨 Artistic filters (Cubism, Pointillism, Modern Art)
-- 📊 Basic image adjustments (brightness, contrast, saturation, etc.)
-- 🏷️ Metadata preservation and editing
-- 📱 Responsive design for desktop and mobile
-- 🌓 Dark/Light mode support
-- 💾 Local storage for session persistence
-- 🖼️ Multiple image input methods (upload, URL, file browser)
-- 📤 Export with custom sizes and formats
+* 🎨 Artistic filters (Cubism, Pointillism, Modern Art)
+* 📊 Basic image adjustments (brightness, contrast, saturation, etc.)
+* 🏷️ Metadata preservation and editing
+* 📱 Responsive design for desktop and mobile
+* 🌓 Dark/Light mode support
+* 💾 Local storage for session persistence
+* 🖼️ Multiple image input methods (upload, URL, file browser)
+* 📤 Export with custom sizes and formats
 
 ## Installation
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+* Node.js (v16 or higher)
+* npm or yarn
 
 ### Setup
 
@@ -103,10 +103,10 @@ interface ImageMetadata {
 ```
 
 Actions:
-- `SET_IMAGE`: Set or clear the current image
-- `UPDATE_FILTER`: Update filter settings
-- `UPDATE_METADATA`: Update image metadata
-- `RESET_FILTERS`: Reset all filters to default values
+* `SET_IMAGE`: Set or clear the current image
+* `UPDATE_FILTER`: Update filter settings
+* `UPDATE_METADATA`: Update image metadata
+* `RESET_FILTERS`: Reset all filters to default values
 
 #### ThemeContext
 Manages the application theme.
@@ -131,39 +131,39 @@ type ArtEffect = (
 ```
 
 Available effects:
-- `applyCubismEffect`: Transforms image into cubist style
-- `applyPointillismEffect`: Creates pointillist effect
-- `applyModernEffect`: Applies modern art style
-- `applyAbstractEffect`: Creates abstract interpretation
+* `applyCubismEffect`: Transforms image into cubist style
+* `applyPointillismEffect`: Creates pointillist effect
+* `applyModernEffect`: Applies modern art style
+* `applyAbstractEffect`: Creates abstract interpretation
 
 ## Upcoming Features
 
 ### Image Rotation
-- [ ] Add rotation controls
-  - Preset buttons for 90°, 180°, 270°
-  - Custom angle input (-360° to 360°)
-  - Preview during rotation
-  - Maintain aspect ratio
-  - Update canvas size accordingly
+* [ ] Add rotation controls
+  * Preset buttons for 90°, 180°, 270°
+  * Custom angle input (-360° to 360°)
+  * Preview during rotation
+  * Maintain aspect ratio
+  * Update canvas size accordingly
 
 ### Image Cropping
-- [ ] Implement cropping functionality
-  - Interactive crop area selection
-  - Aspect ratio presets (16:9, 4:3, 1:1, etc.)
-  - Custom aspect ratio input
-  - Crop area resize handles
-  - Maintain original image quality
-  - Preview crop result
+* [ ] Implement cropping functionality
+  * Interactive crop area selection
+  * Aspect ratio presets (16:9, 4:3, 1:1, etc.)
+  * Custom aspect ratio input
+  * Crop area resize handles
+  * Maintain original image quality
+  * Preview crop result
 
 ### Additional TODOs
-- [ ] Add image resize functionality
-- [ ] Implement undo/redo history
-- [ ] Add keyboard shortcuts
-- [ ] Optimize performance for large images
-- [ ] Add more art filters
-- [ ] Implement batch processing
-- [ ] Add export presets
-- [ ] Improve mobile touch interactions
+* [ ] Add image resize functionality
+* [ ] Implement undo/redo history
+* [ ] Add keyboard shortcuts
+* [ ] Optimize performance for large images
+* [ ] Add more art filters
+* [ ] Implement batch processing
+* [ ] Add export presets
+* [ ] Improve mobile touch interactions
 
 ## Contributing
 
@@ -175,4 +175,4 @@ Available effects:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License * see the LICENSE file for details.
