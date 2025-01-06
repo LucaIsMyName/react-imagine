@@ -1,6 +1,6 @@
 // src/components/ImageArea/ImageArea.tsx
 import React, { useEffect, useRef, useCallback } from "react";
-import { Upload, Download, Trash2, FolderOpen, Link } from "lucide-react";
+import { Upload, Download, Undo, Redo, Trash2, FolderOpen, Link } from "lucide-react";
 import { useEditor } from "../../contexts/EditorContext";
 import { Button } from "@/components/ui/button";
 import FileBrowserDialog from "../FileBrowser/FileBrowserDialog";
@@ -15,7 +15,7 @@ import type { ArtEffect } from "@/lib/effects/types";
 const DEBOUNCE_DELAY = 300;
 
 const ImageArea: React.FC = () => {
-  const { state, dispatch } = useEditor();
+  const { state, dispatch, canUndo, canRedo } = useEditor();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const timeoutRef = useRef<number>();
@@ -211,13 +211,31 @@ const ImageArea: React.FC = () => {
           </div>
         ) : (
           <div className="relative w-full h-full md:flex md:items-center justify-center">
-            <Button
-              variant="destructive"
-              onClick={handleDeleteImage}
-              className="flex items-center gap-2 px-3 absolute top-0 right-0">
-              <Trash2 className="w-4 h-4" />
-              <span className="sr-only">Export</span>
-            </Button>
+            <div className="absolute top-0 right-0 flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => dispatch({ type: "UNDO" })}
+                disabled={!canUndo}
+                className="flex items-center gap-2 px-3">
+                <Undo className="w-4 h-4" />
+                <span className="sr-only">Undo</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => dispatch({ type: "REDO" })}
+                disabled={!canRedo}
+                className="flex items-center gap-2 px-3">
+                <Redo className="w-4 h-4" />
+                <span className="sr-only">Redo</span>
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteImage}
+                className="flex items-center gap-2 px-3">
+                <Trash2 className="w-4 h-4" />
+                <span className="sr-only">Delete</span>
+              </Button>
+            </div>
             <canvas
               ref={canvasRef}
               className="max-w-full max-h-full object-contain shadow-lg border border-border"

@@ -1,4 +1,4 @@
-# React Image Editor
+# React Imagine Editor
 
 A modern, responsive image editor built with React, TypeScript, and Tailwind CSS. Transform your images with artistic filters, basic adjustments, and preserve metadata - all in your browser with no server uploads required.
 

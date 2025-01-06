@@ -1,8 +1,24 @@
 
-// src/contexts/EditorContext.tsx
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-import type { EditorState, FilterSettings, FilterAction, ImageMetadata } from "@/types/editor-types";
+import type { EditorState, FilterSettings, FilterAction, ImageMetadata, CropMode, RotationMode, RotationSettings } from "@/types/editor-types";
 
+interface EditorHistory {
+  past: EditorState[];
+  present: EditorState;
+  future: EditorState[];
+}
+const defaultCropSettings = {
+  mode: "none" as CropMode,
+  aspectRatio: undefined,
+  x: 0,
+  y: 0,
+  width: 100,
+  height: 100
+};
+const defaultRotationSettings: RotationSettings = {
+  mode: "none" as RotationMode,
+  angle: 0
+};
 const defaultFilterSettings: FilterSettings = {
   brightness: 0,
   contrast: 0,
@@ -11,10 +27,12 @@ const defaultFilterSettings: FilterSettings = {
   shadows: 0,
   artStyle: "none",
   artGranularity: 50,
-  artRandomness: 30, 
+  artRandomness: 30,
   rasterStyle: "none",
   rasterGranularity: 50,
   rasterRandomness: 30,
+  cropMode: "none",
+  
 };
 
 const defaultMetadata: ImageMetadata = {
@@ -28,7 +46,6 @@ const defaultMetadata: ImageMetadata = {
   altText: "",
 };
 
-// Get initial state from localStorage if available
 const getInitialState = (): EditorState => {
   const savedState = localStorage.getItem("editorState");
   if (savedState) {
@@ -37,7 +54,9 @@ const getInitialState = (): EditorState => {
       return {
         ...parsed,
         metadata: { ...defaultMetadata, ...parsed.metadata },
-        filterSettings: { ...defaultFilterSettings, ...parsed.filterSettings }, // Ensure all filter settings exist
+        filterSettings: { ...defaultFilterSettings, ...parsed.filterSettings },
+        cropSettings: { ...defaultCropSettings, ...parsed.cropSettings },
+        rotationSettings: { ...defaultRotationSettings, ...parsed.rotationSettings }
       };
     } catch (e) {
       console.error("Failed to parse saved state:", e);
@@ -47,64 +66,134 @@ const getInitialState = (): EditorState => {
     image: null,
     filterSettings: defaultFilterSettings,
     metadata: defaultMetadata,
+    cropSettings: defaultCropSettings,
+    rotationSettings: defaultRotationSettings
   };
 };
 
+const initialHistory: EditorHistory = {
+  past: [],
+  present: getInitialState(),
+  future: [],
+};
+
+type EditorActionWithHistory = FilterAction | { type: "UNDO" } | { type: "REDO" };
+
 const EditorContext = createContext<{
   state: EditorState;
-  dispatch: React.Dispatch<FilterAction>;
+  canUndo: boolean;
+  canRedo: boolean;
+  dispatch: React.Dispatch<EditorActionWithHistory>;
 } | null>(null);
 
-const editorReducer = (state: EditorState, action: FilterAction): EditorState => {
-  let newState: EditorState;
+const MAX_HISTORY_LENGTH = 50; // Limit history to prevent memory issues
+
+const editorReducer = (history: EditorHistory, action: EditorActionWithHistory): EditorHistory => {
+  const { past, present, future } = history;
 
   switch (action.type) {
-    case "SET_IMAGE":
-      newState = {
-        ...state,
-        image: action.payload,
-        ...(action.payload === null && {
-          filterSettings: defaultFilterSettings,
-          metadata: defaultMetadata,
-        }),
-      };
-      break;
+    case "UNDO": {
+      if (past.length === 0) return history;
 
-    case "UPDATE_FILTER":
-      newState = {
-        ...state,
-        filterSettings: {
-          ...state.filterSettings,
-          ...action.payload,
-        },
-      };
-      break;
+      const previous = past[past.length - 1];
+      const newPast = past.slice(0, past.length - 1);
 
-    case "RESET_FILTERS":
-      newState = {
-        ...state,
-        filterSettings: defaultFilterSettings,
+      return {
+        past: newPast,
+        present: previous,
+        future: [present, ...future],
       };
-      break;
+    }
 
-    default:
-      return state;
+    case "REDO": {
+      if (future.length === 0) return history;
+
+      const next = future[0];
+      const newFuture = future.slice(1);
+
+      return {
+        past: [...past, present],
+        present: next,
+        future: newFuture,
+      };
+    }
+
+    default: {
+      let newPresent: EditorState;
+      
+      switch (action.type) {
+        case "SET_IMAGE":
+          newPresent = {
+            ...present,
+            image: action.payload,
+            ...(action.payload === null && {
+              filterSettings: defaultFilterSettings,
+              metadata: defaultMetadata,
+            }),
+          };
+          break;
+
+        case "UPDATE_FILTER":
+          newPresent = {
+            ...present,
+            filterSettings: {
+              ...present.filterSettings,
+              ...action.payload,
+            },
+          };
+          break;
+
+        case "UPDATE_CROP": {
+          const { mode, aspectRatio, ...cropSettings } = action.payload;
+          newPresent = {
+            ...present,
+            filterSettings: {
+              ...present.filterSettings,
+              cropMode: mode,
+            },
+            cropSettings: {
+              aspectRatio,
+              ...cropSettings,
+            },
+          };
+          break;
+        }
+
+        case "RESET_FILTERS":
+          newPresent = {
+            ...present,
+            filterSettings: defaultFilterSettings,
+          };
+          break;
+        default:
+          return history;
+      }
+
+      return {
+        past: [...past, present].slice(-MAX_HISTORY_LENGTH),
+        present: newPresent,
+        future: [],
+      };
+    }
   }
-
-  // Save to localStorage after every state change
-  localStorage.setItem("editorState", JSON.stringify(newState));
-  return newState;
 };
 
 export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(editorReducer, getInitialState());
+  const [history, dispatch] = useReducer(editorReducer, initialHistory);
 
-  // Optional: Save state to localStorage whenever it changes
+  // Save state to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("editorState", JSON.stringify(state));
-  }, [state]);
+    localStorage.setItem("editorState", JSON.stringify(history.present));
+  }, [history.present]);
 
-  return <EditorContext.Provider value={{ state, dispatch }}>{children}</EditorContext.Provider>;
+  const value = {
+    state: history.present,
+    canUndo: history.past.length > 0,
+    canRedo: history.future.length > 0,
+    dispatch,
+  };
+
+  return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 };
 
 export const useEditor = () => {

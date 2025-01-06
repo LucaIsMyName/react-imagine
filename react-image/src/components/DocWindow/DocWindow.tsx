@@ -151,27 +151,26 @@ export const DocWindow: React.FC = () => {
         height: Math.max(300, state.height), // Increased minimum
         transform: `translate(${state.position.x}px, ${state.position.y}px)`,
       }}
-      className="fixed top-0 left-0 bg-background border rounded-lg shadow-lg overflow-hidden flex flex-col z-50">
+      className="fixed top-0 left-0 bg-background/90 backdrop-blur-lg border rounded-lg shadow-lg overflow-hidden flex flex-col z-50">
       {/* Window Header */}
       <div
         onMouseDown={handleMouseDown}
-        className="relative flex items-center justify-between p-2 cursor-move ">
-        <section className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent" />
+        className="relative flex items-center justify-between p-2 cursor-move">
+        <section className="absolute inset-0 bg-gradient-to-b from-background/60 to-transparent" />
         <div className="flex items-center gap-2 z-10">
           <GripVertical className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm font-medium">{state.content === "help" ? "Help Guide" : "Documentation"}</span>
         </div>
         <Button
-          variant="ghost"
-          size="sm"
-          className="h-auto p-1"
+          variant="outline"
+          className="h-auto text-foreground hover:bg-transparent p-1 transition-colors !bg-transparent backdrop-blur-sm"
           onClick={() => dispatch({ type: "CLOSE" })}>
           <X className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Window Content */}
-      <div className="flex-1 overflow-auto p-4 min-h-[400px] bg-background">
+      <div className="flex-1 overflow-auto p-4 min-h-[400px]">
         <ReactMarkdown
           className="prose dark:prose-invert max-w-none"
           components={{
@@ -183,13 +182,37 @@ export const DocWindow: React.FC = () => {
             ),
             h2: ({ node, ...props }) => (
               <h2
-                className="text-xl font-semibold my-3"
+                className="text-xl font-semibold my-4"
+                {...props}
+              />
+            ),
+            h3: ({ node, ...props }) => (
+              <h3
+                className="text-lg font-medium my-4"
+                {...props}
+              />
+            ),
+            h4: ({ node, ...props }) => (
+              <h4
+                className="text-base font-medium my-4"
+                {...props}
+              />
+            ),
+            h5: ({ node, ...props }) => (
+              <h5
+                className="text-base font-normal my-4"
+                {...props}
+              />
+            ),
+            h6: ({ node, ...props }) => (
+              <h6
+                className="text-sm font-normal my-4"
                 {...props}
               />
             ),
             p: ({ node, ...props }) => (
               <p
-                className="my-2"
+                className="my-4"
                 {...props}
               />
             ),
@@ -205,9 +228,34 @@ export const DocWindow: React.FC = () => {
                 {...props}
               />
             ),
+            // pre when ```and code when `, but if code is inse pre i need a special case!
             pre: ({ node, ...props }) => (
               <pre
-                className="bg-muted text-foreground p-2 border shadow-sm rounded overflow-x-scroll text-nowrap my-4 w-full"
+                className="my-4 p-2 px-3 bg-muted/30 rounded-lg border overflow-x-scroll"
+                {...props}
+              />
+            ),
+            code: ({ node, ...props }) => (
+              <code
+                className="bg-muted/30 rounded p-1"
+                {...props}
+              />
+            ),
+            blockquote: ({ node, ...props }) => (
+              <blockquote
+                className="border-l-4 border-muted/50 pl-2 my-4"
+                {...props}
+              />
+            ),
+            a: ({ node, ...props }) => (
+              <a
+                className="text-blue-500 underline"
+                {...props}
+              />
+            ),
+            img: ({ node, ...props }) => (
+              <img
+                className="my-4"
                 {...props}
               />
             ),

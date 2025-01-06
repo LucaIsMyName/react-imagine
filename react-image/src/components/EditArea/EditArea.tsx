@@ -8,6 +8,8 @@ import SliderLabel from "./SliderLabel";
 import MetadataSection from "./MetadataSection";
 import RasterStyles from "./RasterStyles";
 import ArtStyles from "./ArtStyles";
+import TransformControls from "./TransformControls";
+import type { CropMode, RotationMode } from "@/types/editor-types";
 
 const EditArea: React.FC = () => {
   const { state, dispatch } = useEditor();
@@ -33,6 +35,57 @@ const EditArea: React.FC = () => {
     });
   };
 
+  const handleCropModeChange = (mode: CropMode) => {
+    const aspectRatios: Record<CropMode, number | undefined> = {
+      none: undefined,
+      square: 1,
+      portrait: 3 / 4,
+      landscape: 4 / 3,
+      widescreen: 16 / 9,
+      video: 9 / 16,
+      free: undefined,
+    };
+
+    dispatch({
+      type: "UPDATE_CROP",
+      payload: {
+        // @ts-ignore
+        mode,
+        aspectRatio: aspectRatios[mode],
+        x: 25,
+        y: 25,
+        width: 50,
+        height: 50,
+      },
+    });
+  };
+
+  const handleRotationModeChange = (mode: RotationMode, angle?: number) => {
+    dispatch({
+      type: "UPDATE_ROTATION",
+      payload: {
+        mode,
+        angle: angle ?? 0,
+      },
+    });
+  };
+
+  const handleRotationAngleChange = (angle: number) => {
+    dispatch({
+      type: "UPDATE_ROTATION",
+      payload: {
+        angle,
+      },
+    });
+  };
+  const handleResetCrop = () => {
+    dispatch({ type: "RESET_CROP" });
+  };
+
+  const handleResetRotation = () => {
+    dispatch({ type: "RESET_ROTATION" });
+  };
+
   const handleMetadataChange = (update: Partial<ImageMetadata>) => {
     dispatch({
       type: "UPDATE_METADATA",
@@ -54,11 +107,11 @@ const EditArea: React.FC = () => {
         <h2 className="text-lg font-semibold">Settings</h2>
         <div className="flex gap-2">
           <Button
-            variant="link"
+            variant="outline"
             onClick={() => dispatch({ type: "RESET_FILTERS" })}
-            className="flex items-center px-3 py-4 bg-transparent">
+            className="flex items-center px-3 bg-transparent">
             <span className="sr-only">Reset</span>
-            <RotateCcw className="h-4 w-4 mr-0" />
+            <RotateCcw className="h-4 w-4" />
           </Button>
           <ExportDialog />
         </div>
@@ -66,6 +119,16 @@ const EditArea: React.FC = () => {
 
       {/* Basic Adjustments */}
       <div className="space-y-6">
+        <TransformControls
+          cropMode={state.cropSettings.mode}
+          rotationMode={state.rotationSettings.mode}
+          rotationAngle={state.rotationSettings.angle}
+          onCropModeChange={handleCropModeChange}
+          onRotationModeChange={handleRotationModeChange}
+          onRotationAngleChange={handleRotationAngleChange}
+          onResetCrop={handleResetCrop}
+          onResetRotation={handleResetRotation}
+        />
         {/* Base Filters */}
         <div className="space-y-4 p-2 pb-4 rounded border bg-background-muted rounded-md shadow-sm">
           <h3 className="text-base font-medium">Base Filters</h3>

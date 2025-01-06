@@ -57,8 +57,9 @@ const App: React.FC = () => {
                 className="
                 md:hidden
                 group fixed bottom-0 left-0 right-0 
-                bg-background/90 backdrop-blur-lg backdrop-saturate-200 
+                bg-background/90 backdrop-blur-lg backdrop-saturate-100 
                 border-t border-border
+                shadow-lg
                 z-10
               ">
                 <summary className="list-none p-4 cursor-pointer hover:bg-background/10 hover:bg-gradient-to-b from-muted-foreground/[0.025] to-transparent">

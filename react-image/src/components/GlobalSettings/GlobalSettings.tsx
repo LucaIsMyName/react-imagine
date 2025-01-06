@@ -13,18 +13,18 @@ const GlobalSettings: React.FC = () => {
 
   const handleHelpClick = () => {
     console.log("Help click - Before dispatch");
-    dispatch({ 
-      type: "TOGGLE_WINDOW", 
-      payload: "help"
+    dispatch({
+      type: "TOGGLE_WINDOW",
+      payload: "help",
     });
     console.log("Help click - After dispatch");
   };
-  
+
   const handleDocsClick = () => {
     console.log("Docs click - Before dispatch");
-    dispatch({ 
-      type: "TOGGLE_WINDOW", 
-      payload: "docs"
+    dispatch({
+      type: "TOGGLE_WINDOW",
+      payload: "docs",
     });
     console.log("Docs click - After dispatch");
   };
@@ -45,14 +45,14 @@ const GlobalSettings: React.FC = () => {
         </h1>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 mr-2 pr-4 border-r">
+          <div className="flex items-center gap-2 mr-2 pr-2 border-r">
             <Button
               variant="link"
               size="sm"
               className="gap-2"
               onClick={handleHelpClick}>
               <HelpCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Help</span>
+              <span className="hidden md:inline text-xs text-muted-foreground">Help</span>
             </Button>
             <Button
               variant="link"
@@ -60,7 +60,7 @@ const GlobalSettings: React.FC = () => {
               className="gap-2"
               onClick={handleDocsClick}>
               <FileText className="w-4 h-4" />
-              <span className="hidden sm:inline">Docs</span>
+              <span className="hidden md:inline text-xs text-muted-foreground">Docs</span>
             </Button>
           </div>
 
@@ -84,10 +84,10 @@ const GlobalSettings: React.FC = () => {
             </Button>
           </URLInputDialog>
 
-          <div className="ml-2 pl-4 border-l">
+          <div className="ml-2 pl-2 border-l">
             <Button
               onClick={toggleTheme}
-              variant="outline"
+              variant="link"
               className="px-3">
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>

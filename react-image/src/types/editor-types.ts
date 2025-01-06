@@ -14,6 +14,24 @@ export interface FilterSettings {
   rasterRandomness: number;
 }
 
+export type CropMode = "none" | "square" | "portrait" | "landscape" | "widescreen" | "video" | "free";
+
+export type RotationMode = "none" | "90" | "180" | "270" | "free";
+
+export interface CropSettings {
+  mode: CropMode;
+  aspectRatio?: number; // Width/Height ratio
+  x: number; // Crop start X (percentage)
+  y: number; // Crop start Y (percentage)
+  width: number; // Crop width (percentage)
+  height: number; // Crop height (percentage)
+}
+
+export interface RotationSettings {
+  mode: RotationMode;
+  angle: number; // Degrees
+}
+
 export interface ImageMetadata {
   title: string;
   description: string;
@@ -25,10 +43,18 @@ export interface ImageMetadata {
   altText: string;
 }
 
-export interface EditorState {
-  image: string | null;
+interface EditorState {
+  image: File | null;
   filterSettings: FilterSettings;
   metadata: ImageMetadata;
+  cropSettings: {
+    mode: CropMode;
+    aspectRatio?: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  rotationSettings: RotationSettings;
 }
-
 export type FilterAction = { type: "SET_IMAGE"; payload: string | null } | { type: "UPDATE_FILTER"; payload: Partial<FilterSettings> } | { type: "UPDATE_METADATA"; payload: Partial<ImageMetadata> } | { type: "RESET_FILTERS" };

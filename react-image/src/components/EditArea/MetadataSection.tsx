@@ -31,14 +31,14 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
         <ChevronDown className="w-4 h-4" />
       </summary>
 
-      <div className="space-y-2 mb-4 p-2 pt-0">
+      <div className="mb-4 p-2 pt-0 space-y-2">
         {/* Title */}
         <div className="space-y-1">
           <label className="text-xs lg:text-sm text-foreground">Title</label>
           <Input
             value={metadata.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white/80 dark:bg-black/80"
+            className="font-mono h-9 md:text-xs text-base bg-white/80 dark:bg-black/80"
             placeholder="Image title"
           />
         </div>
@@ -49,7 +49,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.description}
             onChange={(e) => onChange({ description: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="Image description or caption"
           />
         </div>
@@ -60,7 +60,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.altText}
             onChange={(e) => onChange({ altText: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="Alternative text for accessibility"
           />
         </div>
@@ -71,7 +71,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.copyright}
             onChange={(e) => onChange({ copyright: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="© 2024 Your Name"
           />
         </div>
@@ -82,7 +82,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.author}
             onChange={(e) => onChange({ author: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="Image author or creator"
           />
         </div>
@@ -93,7 +93,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.keywords.join(", ")}
             onChange={(e) => handleKeywordsChange(e.target.value)}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="Comma-separated keywords"
           />
         </div>
@@ -105,7 +105,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
             type="date"
             value={metadata.dateCreated}
             onChange={(e) => onChange({ dateCreated: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
           />
         </div>
 
@@ -115,7 +115,7 @@ const MetadataSection: React.FC<MetadataSectionProps> = ({ metadata, onChange })
           <Input
             value={metadata.location}
             onChange={(e) => onChange({ location: e.target.value })}
-            className="font-mono h-9 md:text-xs text-sm bg-white dark:bg-black"
+            className="font-mono h-9 md:text-xs text-base bg-white dark:bg-black"
             placeholder="Where the image was taken"
           />
         </div>
