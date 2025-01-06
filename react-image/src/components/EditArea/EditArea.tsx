@@ -56,8 +56,8 @@ const EditArea: React.FC = () => {
           <Button
             variant="link"
             onClick={() => dispatch({ type: "RESET_FILTERS" })}
-            className="flex items-center px-3 py-4">
-            <span className="block backdrop-blur-sm lg:block mr-2 text-[11px] lg:text-xs text-foreground/70 underline-none">Reset</span>
+            className="flex items-center px-3 py-4 bg-transparent">
+            <span className="sr-only">Reset</span>
             <RotateCcw className="h-4 w-4 mr-0" />
           </Button>
           <ExportDialog />

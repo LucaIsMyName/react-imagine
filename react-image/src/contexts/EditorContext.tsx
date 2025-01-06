@@ -10,8 +10,8 @@ const defaultFilterSettings: FilterSettings = {
   highlights: 0,
   shadows: 0,
   artStyle: "none",
-  artGranularity: 50,  // Added for art styles
-  artRandomness: 30,   // Added for art styles
+  artGranularity: 50,
+  artRandomness: 30, 
   rasterStyle: "none",
   rasterGranularity: 50,
   rasterRandomness: 30,

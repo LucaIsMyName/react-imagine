@@ -12,25 +12,25 @@ const GlobalSettings: React.FC = () => {
   const { dispatch } = useDocWindow();
 
   const handleHelpClick = () => {
-    console.log("Help click - Before dispatch"); // Add this log
+    console.log("Help click - Before dispatch");
     dispatch({ 
       type: "TOGGLE_WINDOW", 
       payload: "help"
     });
-    console.log("Help click - After dispatch"); // Add this log
+    console.log("Help click - After dispatch");
   };
   
   const handleDocsClick = () => {
-    console.log("Docs click - Before dispatch"); // Add this log
+    console.log("Docs click - Before dispatch");
     dispatch({ 
       type: "TOGGLE_WINDOW", 
       payload: "docs"
     });
-    console.log("Docs click - After dispatch"); // Add this log
+    console.log("Docs click - After dispatch");
   };
 
   return (
-    <header className="border-b fixed top-0 left-0 w-full shadow-inner">
+    <header className="border-b fixed top-0 left-0 w-full shadow-inner z-40">
       <div className="mx-auto px-4 py-4 flex justify-between items-center">
         <h1 className="flex-1 text-2xl font-bold flex gap-4 items-center truncate">
           <div className="hidden md:block">

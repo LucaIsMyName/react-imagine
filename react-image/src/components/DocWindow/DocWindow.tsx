@@ -151,7 +151,7 @@ export const DocWindow: React.FC = () => {
         height: Math.max(300, state.height), // Increased minimum
         transform: `translate(${state.position.x}px, ${(state.position.y)}px)`,
       }}
-      className="fixed bg-background border rounded-lg shadow-lg overflow-hidden flex flex-col z-50">
+      className="fixed top-0 left-0 bg-background border rounded-lg shadow-lg overflow-hidden flex flex-col z-50">
       {/* Window Header */}
       <div
         onMouseDown={handleMouseDown}

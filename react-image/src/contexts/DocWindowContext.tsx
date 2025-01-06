@@ -18,28 +18,48 @@ interface DocWindowState {
 
 type DocWindowAction = { type: "TOGGLE_WINDOW"; payload?: ContentType } | { type: "RESIZE"; payload: { width?: number; height?: number } } | { type: "MOVE"; payload: WindowPosition } | { type: "CLOSE" };
 const constrainPosition = (x: number, y: number, width: number, height: number) => {
-  const padding = 20; // Padding from screen edges
+  const padding = 20;
+  const topOffset = 68; // Height of your top header
+  
   return {
     x: Math.max(
       -width + 100, // Never hide more than width-100px off screen left
-      Math.min(window.innerWidth - 100, x) // Never hide more than width-100px off screen right
+      Math.min(window.innerWidth - 100, x) // Never hide more than 100px off screen right
     ),
     y: Math.max(
-      0, // Never allow moving above top of screen
-      Math.min(window.innerHeight - 50, y) // Always keep at least 50px visible at bottom
-    ),
+      topOffset + padding, // Keep below header
+      Math.min(
+        window.innerHeight - 50, // Always keep at least 50px visible at bottom
+        y
+      )
+    )
   };
 };
 
 const calculateDefaultPosition = () => {
   if (typeof window === "undefined") return { x: 0, y: 0 };
 
-  const width = 600;
-  const height = 500;
-  const padding = 20;
+  const width = 600;  // Default width
+  const height = 500; // Default height
+  const padding = 20; // Padding from edges
+  const topOffset = 68; // Height of your top header
 
-  // Use constrainPosition here too
-  return constrainPosition(Math.floor(((window.innerWidth - width) / 2) * -1), Math.floor(((window.innerHeight - height) / 2) * -1), width, height);
+  return {
+    x: Math.max(
+      padding, 
+      Math.min(
+        window.innerWidth - width - padding,
+        Math.floor((window.innerWidth - width) / 2)
+      )
+    ),
+    y: Math.max(
+      topOffset + padding, // Account for header height
+      Math.min(
+        window.innerHeight - height - padding,
+        Math.floor((window.innerHeight - height) / 2) + topOffset
+      )
+    )
+  };
 };
 
 const defaultState: DocWindowState = {
@@ -57,12 +77,11 @@ const getInitialState = (): DocWindowState => {
     if (saved) {
       const parsed = JSON.parse(saved);
       return {
-        ...defaultState, // Start with defaults
-        ...parsed, // Override with saved values
-        // Ensure minimum dimensions
+        ...defaultState,
+        ...parsed,
         width: Math.max(300, parsed.width || defaultState.width),
         height: Math.max(300, parsed.height || defaultState.height),
-        isOpen: false, // Always start closed
+        isOpen: false,
       };
     }
   } catch (e) {
