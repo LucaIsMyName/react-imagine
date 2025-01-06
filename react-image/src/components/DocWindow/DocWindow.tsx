@@ -149,14 +149,15 @@ export const DocWindow: React.FC = () => {
       style={{
         width: Math.max(300, state.width), // Increased minimum
         height: Math.max(300, state.height), // Increased minimum
-        transform: `translate(${state.position.x}px, ${(state.position.y)}px)`,
+        transform: `translate(${state.position.x}px, ${state.position.y}px)`,
       }}
       className="fixed top-0 left-0 bg-background border rounded-lg shadow-lg overflow-hidden flex flex-col z-50">
       {/* Window Header */}
       <div
         onMouseDown={handleMouseDown}
-        className="flex items-center justify-between p-2 bg-muted/50 cursor-move border-b">
-        <div className="flex items-center gap-2">
+        className="relative flex items-center justify-between p-2 cursor-move ">
+        <section className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent" />
+        <div className="flex items-center gap-2 z-10">
           <GripVertical className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm font-medium">{state.content === "help" ? "Help Guide" : "Documentation"}</span>
         </div>
@@ -176,31 +177,37 @@ export const DocWindow: React.FC = () => {
           components={{
             h1: ({ node, ...props }) => (
               <h1
-                className="text-2xl font-bold mb-4"
+                className="text-2xl font-bold my-4"
                 {...props}
               />
             ),
             h2: ({ node, ...props }) => (
               <h2
-                className="text-xl font-semibold mb-3"
+                className="text-xl font-semibold my-3"
                 {...props}
               />
             ),
             p: ({ node, ...props }) => (
               <p
-                className="mb-2"
+                className="my-2"
                 {...props}
               />
             ),
             ul: ({ node, ...props }) => (
               <ul
-                className="list-disc pl-4 mb-4"
+                className="list-disc pl-4 my-4"
                 {...props}
               />
             ),
             ol: ({ node, ...props }) => (
               <ol
-                className="list-decimal pl-4 mb-4"
+                className="list-decimal pl-4 my-4"
+                {...props}
+              />
+            ),
+            pre: ({ node, ...props }) => (
+              <pre
+                className="bg-muted text-foreground p-2 border shadow-sm rounded overflow-x-scroll text-nowrap my-4 w-full"
                 {...props}
               />
             ),

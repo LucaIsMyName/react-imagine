@@ -47,7 +47,7 @@ const GlobalSettings: React.FC = () => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 mr-2 pr-4 border-r">
             <Button
-              variant="ghost"
+              variant="link"
               size="sm"
               className="gap-2"
               onClick={handleHelpClick}>
@@ -55,7 +55,7 @@ const GlobalSettings: React.FC = () => {
               <span className="hidden sm:inline">Help</span>
             </Button>
             <Button
-              variant="ghost"
+              variant="link"
               size="sm"
               className="gap-2"
               onClick={handleDocsClick}>

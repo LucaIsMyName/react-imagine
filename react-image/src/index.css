@@ -72,8 +72,9 @@
     color: hsl(var(--primary-foreground));
   }
 
-  * {
+  :where(*) {
     transition: color 0.1s, background-color 0.1s, fill 0.1s, stroke 0.1s;
+    user-select: none;
   }
 }
  
