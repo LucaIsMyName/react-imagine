@@ -9,8 +9,8 @@ import { applyCubismEffect } from "@/lib/effects/cubism";
 import { applyPointillismEffect } from "@/lib/effects/pointillism";
 import { applyModernEffect } from "@/lib/effects/modern";
 import { applyAbstractEffect } from "@/lib/effects/abstract";
+import { applyRasterEffect } from "@/lib/effects/raster";
 import type { ArtEffect } from "@/lib/effects/types";
-
 
 const DEBOUNCE_DELAY = 300;
 
@@ -21,7 +21,7 @@ const ImageArea: React.FC = () => {
   const timeoutRef = useRef<number>();
   const lastImageRef = useRef<HTMLImageElement>();
 
- const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -37,13 +37,10 @@ const ImageArea: React.FC = () => {
     dispatch({ type: "RESET_FILTERS" });
   };
 
-  const applyEffects = async (
-    ctx: CanvasRenderingContext2D, 
-    img: HTMLImageElement, 
-    canvas: HTMLCanvasElement
-  ) => {
+  const applyEffects = async (ctx: CanvasRenderingContext2D, img: HTMLImageElement, canvas: HTMLCanvasElement) => {
     const { width, height } = canvas;
 
+    // Create a temporary canvas for base filters
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = width;
     tempCanvas.height = height;
@@ -51,6 +48,7 @@ const ImageArea: React.FC = () => {
 
     if (!tempCtx) return;
 
+    // Apply base adjustments
     tempCtx.filter = `
       brightness(${100 + state.filterSettings.brightness}%)
       contrast(${100 + state.filterSettings.contrast}%)
@@ -59,15 +57,19 @@ const ImageArea: React.FC = () => {
 
     tempCtx.drawImage(img, 0, 0, width, height);
 
+    // Create intermediate image with base filters
     const filteredImg = new Image();
     await new Promise((resolve) => {
       filteredImg.onload = resolve;
       filteredImg.src = tempCanvas.toDataURL();
     });
 
+    // Clear main canvas
+    ctx.clearRect(0, 0, width, height);
     ctx.globalCompositeOperation = "source-over";
     ctx.filter = "none";
 
+    // Apply art style if selected
     const effectMap: Record<string, ArtEffect> = {
       cubism: applyCubismEffect,
       pointillism: applyPointillismEffect,
@@ -75,14 +77,46 @@ const ImageArea: React.FC = () => {
       abstract: applyAbstractEffect,
     };
 
-    const selectedEffect = effectMap[state.filterSettings.artStyle];
-    if (selectedEffect) {
-      selectedEffect(ctx, filteredImg, width, height);
+    if (state.filterSettings.artStyle !== "none") {
+      const selectedEffect = effectMap[state.filterSettings.artStyle];
+      if (selectedEffect) {
+        selectedEffect(ctx, filteredImg, width, height);
+
+        // If we also have a raster effect, we need another intermediate canvas
+        if (state.filterSettings.rasterStyle !== "none") {
+          const artStyleCanvas = document.createElement("canvas");
+          artStyleCanvas.width = width;
+          artStyleCanvas.height = height;
+          const artStyleCtx = artStyleCanvas.getContext("2d");
+          if (artStyleCtx) {
+            artStyleCtx.drawImage(canvas, 0, 0);
+            ctx.clearRect(0, 0, width, height);
+
+            const artStyleImg = new Image();
+            await new Promise((resolve) => {
+              artStyleImg.onload = resolve;
+              artStyleImg.src = artStyleCanvas.toDataURL();
+            });
+
+            // Apply raster effect on top of art style
+            applyRasterEffect(ctx, artStyleImg, width, height, state.filterSettings.rasterStyle, {
+              granularity: state.filterSettings.rasterGranularity,
+              randomness: state.filterSettings.rasterRandomness,
+            });
+          }
+        }
+      }
+    } else if (state.filterSettings.rasterStyle !== "none") {
+      // Apply only raster effect if no art style is selected
+      applyRasterEffect(ctx, filteredImg, width, height, state.filterSettings.rasterStyle, {
+        granularity: state.filterSettings.rasterGranularity,
+        randomness: state.filterSettings.rasterRandomness,
+      });
     } else {
+      // No effects, just draw the filtered image
       ctx.drawImage(filteredImg, 0, 0);
     }
   };
-
   const debouncedApplyEffects = useCallback(() => {
     if (!state.image || !canvasRef.current || !lastImageRef.current) return;
 

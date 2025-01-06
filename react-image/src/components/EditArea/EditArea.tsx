@@ -8,14 +8,22 @@ import { RotateCcw, CircleX as NoneIcon, Boxes as CubismIcon, Grip as Pointillis
 import ExportDialog from "../ExportDialog/ExportDialog";
 import SliderLabel from "./SliderLabel";
 import MetadataSection from "./MetadataSection";
+import RasterStyles from "./RasterStyles";
 
 const EditArea: React.FC = () => {
   const { state, dispatch } = useEditor();
 
-  const handleFilterChange = (name: keyof Omit<FilterSettings, "artStyle">, value: number) => {
+  const handleFilterChange = (name: keyof Omit<FilterSettings, "artStyle" | "rasterStyle">, value: number) => {
     dispatch({
       type: "UPDATE_FILTER",
       payload: { [name]: value },
+    });
+  };
+
+  const handleRasterStyleChange = (style: string) => {
+    dispatch({
+      type: "UPDATE_FILTER",
+      payload: { rasterStyle: style },
     });
   };
 
@@ -161,7 +169,14 @@ const EditArea: React.FC = () => {
             ))}
           </div>
         </div>
-
+        <RasterStyles
+          style={state.filterSettings.rasterStyle}
+          granularity={state.filterSettings.rasterGranularity}
+          randomness={state.filterSettings.rasterRandomness}
+          onStyleChange={handleRasterStyleChange}
+          onGranularityChange={(value) => handleFilterChange("rasterGranularity", value)}
+          onRandomnessChange={(value) => handleFilterChange("rasterRandomness", value)}
+        />
         {/* Sliders */}
         {/* Inside your EditArea component, replace the slider sections */}
         <div className="space-y-4">

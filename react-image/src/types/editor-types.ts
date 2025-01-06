@@ -1,5 +1,6 @@
 // src/types/editor-types.ts
-export type ArtStyle = 'none' | 'cubism' | 'modern' | 'abstract' | 'pointillism' | 'renaissance';
+export type ArtStyle = "none" | "cubism" | "modern" | "abstract" | "pointillism" | "renaissance";
+export type RasterStyle = "none" | "dots" | "lines-horizontal" | "lines-vertical";
 
 export interface FilterSettings {
   brightness: number;
@@ -8,6 +9,9 @@ export interface FilterSettings {
   highlights: number;
   shadows: number;
   artStyle: ArtStyle;
+  rasterStyle: RasterStyle;
+  rasterGranularity: number;
+  rasterRandomness: number;
 }
 
 export interface ImageMetadata {
@@ -27,8 +31,4 @@ export interface EditorState {
   metadata: ImageMetadata;
 }
 
-export type FilterAction =
-  | { type: 'SET_IMAGE'; payload: string | null }
-  | { type: 'UPDATE_FILTER'; payload: Partial<FilterSettings> }
-  | { type: 'UPDATE_METADATA'; payload: Partial<ImageMetadata> }
-  | { type: 'RESET_FILTERS' };
+export type FilterAction = { type: "SET_IMAGE"; payload: string | null } | { type: "UPDATE_FILTER"; payload: Partial<FilterSettings> } | { type: "UPDATE_METADATA"; payload: Partial<ImageMetadata> } | { type: "RESET_FILTERS" };

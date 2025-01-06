@@ -9,22 +9,25 @@ const defaultFilterSettings: FilterSettings = {
   highlights: 0,
   shadows: 0,
   artStyle: "none",
+  rasterStyle: "none",
+  rasterGranularity: 50,
+  rasterRandomness: 30,
 };
 
 const defaultMetadata: ImageMetadata = {
-  title: '',
-  description: '',
-  copyright: '',
-  author: '',
+  title: "",
+  description: "",
+  copyright: "",
+  author: "",
   keywords: [],
-  dateCreated: new Date().toISOString().split('T')[0],
-  location: '',
-  altText: '',
+  dateCreated: new Date().toISOString().split("T")[0],
+  location: "",
+  altText: "",
 };
 
 // Get initial state from localStorage if available
 const getInitialState = (): EditorState => {
-  const savedState = localStorage.getItem('editorState');
+  const savedState = localStorage.getItem("editorState");
   if (savedState) {
     try {
       const parsed = JSON.parse(savedState);
@@ -33,7 +36,7 @@ const getInitialState = (): EditorState => {
         metadata: { ...defaultMetadata, ...parsed.metadata }, // Ensure all metadata fields exist
       };
     } catch (e) {
-      console.error('Failed to parse saved state:', e);
+      console.error("Failed to parse saved state:", e);
     }
   }
   return {
@@ -56,8 +59,7 @@ const editorReducer = (state: EditorState, action: FilterAction): EditorState =>
       newState = {
         ...state,
         image: action.payload,
-        // Reset filters when setting a new image or when clearing the image
-        ...(action.payload === null && { 
+        ...(action.payload === null && {
           filterSettings: defaultFilterSettings,
           metadata: defaultMetadata,
         }),
@@ -74,13 +76,10 @@ const editorReducer = (state: EditorState, action: FilterAction): EditorState =>
       };
       break;
 
-    case "UPDATE_METADATA":
+    case "RESET_FILTERS":
       newState = {
         ...state,
-        metadata: {
-          ...state.metadata,
-          ...action.payload,
-        },
+        filterSettings: defaultFilterSettings,
       };
       break;
 
@@ -96,7 +95,7 @@ const editorReducer = (state: EditorState, action: FilterAction): EditorState =>
   }
 
   // Save to localStorage after every state change
-  localStorage.setItem('editorState', JSON.stringify(newState));
+  localStorage.setItem("editorState", JSON.stringify(newState));
   return newState;
 };
 
@@ -105,7 +104,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Optional: Save state to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('editorState', JSON.stringify(state));
+    localStorage.setItem("editorState", JSON.stringify(state));
   }, [state]);
 
   return <EditorContext.Provider value={{ state, dispatch }}>{children}</EditorContext.Provider>;

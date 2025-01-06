@@ -1,14 +1,22 @@
 // src/lib/utils/canvas.ts
-import { applyCubismEffect } from '../effects/cubism';
-import { applyPointillismEffect } from '../effects/pointillism';
-import { applyModernEffect } from '../effects/modern';
-import { applyAbstractEffect } from '../effects/abstract';
-import type { FilterSettings } from '@/types/editor-types';
+import { applyCubismEffect } from "../effects/cubism";
+import { applyPointillismEffect } from "../effects/pointillism";
+import { applyModernEffect } from "../effects/modern";
+import { applyAbstractEffect } from "../effects/abstract";
+import { applyRasterEffect } from "../effects/raster";
+import type { FilterSettings } from "@/types/editor-types";
+
+// Helper function to reset canvas context state
+const resetCanvasContext = (ctx: CanvasRenderingContext2D) => {
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.filter = 'none';
+};
 
 export async function createProcessedCanvas(
-  originalImage: string,
-  filterSettings: FilterSettings,
-  targetWidth?: number,
+  originalImage: string, 
+  filterSettings: FilterSettings, 
+  targetWidth?: number, 
   targetHeight?: number
 ): Promise<HTMLCanvasElement> {
   // Create new image from source
@@ -20,15 +28,18 @@ export async function createProcessedCanvas(
 
   // Calculate dimensions
   const width = targetWidth || img.width;
-  const height = targetHeight || (targetWidth ? (img.height * targetWidth / img.width) : img.height);
+  const height = targetHeight || (targetWidth ? (img.height * targetWidth) / img.width : img.height);
 
-  // Create canvas
-  const canvas = document.createElement('canvas');
+  // Create main canvas
+  const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  
-  if (!ctx) throw new Error('Could not get canvas context');
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) throw new Error("Could not get canvas context");
+
+  // Always start with a clean state
+  resetCanvasContext(ctx);
 
   // Apply base filters
   ctx.filter = `
@@ -36,11 +47,32 @@ export async function createProcessedCanvas(
     contrast(${100 + filterSettings.contrast}%)
     saturate(${100 + filterSettings.saturation}%)
   `;
-  
+
+  // Draw initial image
   ctx.drawImage(img, 0, 0, width, height);
 
-  // If we have an art style, we need to process it through a temporary canvas
-  if (filterSettings.artStyle !== 'none') {
+  // If no effects are applied, we can return early
+  if (filterSettings.artStyle === "none" && filterSettings.rasterStyle === "none") {
+    return canvas;
+  }
+
+  // Create a temporary canvas for effects
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = width;
+  tempCanvas.height = height;
+  const tempCtx = tempCanvas.getContext("2d");
+
+  if (!tempCtx) throw new Error("Could not get temp canvas context");
+
+  // Copy the base filtered image to temp canvas
+  tempCtx.drawImage(canvas, 0, 0);
+
+  // Clear the original canvas and reset its state
+  ctx.clearRect(0, 0, width, height);
+  resetCanvasContext(ctx);
+
+  // Apply art style effects if selected
+  if (filterSettings.artStyle !== "none") {
     const effectMap = {
       cubism: applyCubismEffect,
       pointillism: applyPointillismEffect,
@@ -48,24 +80,51 @@ export async function createProcessedCanvas(
       abstract: applyAbstractEffect,
     };
 
-    // Create a new canvas with the base filters
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = width;
-    tempCanvas.height = height;
-    const tempCtx = tempCanvas.getContext('2d');
-    
-    if (!tempCtx) throw new Error('Could not get temp canvas context');
-
-    // Clear the original canvas
-    ctx.clearRect(0, 0, width, height);
-    ctx.filter = 'none'; // Reset filters for art effect
-
-    // Apply art effect
     const selectedEffect = effectMap[filterSettings.artStyle as keyof typeof effectMap];
     if (selectedEffect) {
-      selectedEffect(ctx, img, width, height);
+      selectedEffect(ctx, tempCanvas, width, height);
+    } else {
+      // If no effect applied, copy back the filtered image
+      ctx.drawImage(tempCanvas, 0, 0);
     }
+  } else {
+    // No art style, copy back the filtered image
+    ctx.drawImage(tempCanvas, 0, 0);
   }
+
+  // If we're going to apply raster effects, we need to save the current state
+  if (filterSettings.rasterStyle !== "none") {
+    // Create a new temp canvas for raster effect
+    const rasterCanvas = document.createElement("canvas");
+    rasterCanvas.width = width;
+    rasterCanvas.height = height;
+    const rasterCtx = rasterCanvas.getContext("2d");
+
+    if (!rasterCtx) throw new Error("Could not get raster canvas context");
+
+    // Copy current state to raster canvas
+    rasterCtx.drawImage(canvas, 0, 0);
+
+    // Clear main canvas and reset its state
+    ctx.clearRect(0, 0, width, height);
+    resetCanvasContext(ctx);
+
+    // Apply raster effect
+    applyRasterEffect(
+      ctx,
+      rasterCanvas,
+      width,
+      height,
+      filterSettings.rasterStyle as 'dots' | 'lines-horizontal' | 'lines-vertical',
+      {
+        granularity: filterSettings.rasterGranularity,
+        randomness: filterSettings.rasterRandomness
+      }
+    );
+  }
+
+  // Final reset of canvas state
+  resetCanvasContext(ctx);
 
   return canvas;
 }
