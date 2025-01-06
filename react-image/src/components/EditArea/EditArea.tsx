@@ -103,7 +103,7 @@ const EditArea: React.FC = () => {
 
   return (
     <div className=" space-y-6 md:shadow-inner bg-muted/10 h-full overflow-y-scroll">
-      <div className="p-4 flex items-center md:bg-background/70 md:z-30 md:border-b md:sticky top-0 left-0 w-full backdrop-blur-lg items-center justify-between">
+      <div className="p-4 flex items-center md:bg-background/70 bg-transparent md:z-30 md:border-b md:sticky top-0 left-0 w-full md:backdrop-blur-lg items-center justify-between">
         <h2 className="text-base font-semibold">Settings</h2>
         <div className="flex gap-2 items-center">
           <Button

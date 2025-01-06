@@ -53,15 +53,7 @@ const GlobalSettings: React.FC = () => {
 
         <div className="flex items-center gap-2 h-full">
           <div className="flex items-center gap-2 mr-2 pr-2 border-r h-full">
-            <Button
-              variant="link"
-              size="sm"
-              className="gap-2"
-              onClick={handlePaymentClick}>
-              <Heart className="w-3.5 h-3.5" />
-              <span className="hidden md:inline text-xs text-muted-foreground">Support</span>
-            </Button>
-            <div className="hidden sm:flex items-center gap-8 pr-6 border-r h-full py-2">
+            <div className="hidden sm:flex items-center gap-4 pr-4 border-r h-full">
               <a
                 href="https://lucamack.at/"
                 target="_blank">
@@ -69,7 +61,7 @@ const GlobalSettings: React.FC = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   width="914"
                   height="914"
-                  className="size-5 scale-[1.3]"
+                  className="size-6 scale-[1] mr-2"
                   viewBox="0 0 914 914">
                   <g
                     id="Group_10"
@@ -117,11 +109,20 @@ const GlobalSettings: React.FC = () => {
                   </g>
                 </svg>
               </a>
+              
               <a
                 href="https://github.com/LucaIsMyName/react-imagine/tree/main/react-image"
                 target="_blank">
                 <Github className="w-4 h-4" />
               </a>
+              <Button
+                variant="link"
+                size="sm"
+                className="gap-2"
+                onClick={handlePaymentClick}>
+                <Heart className="w-4 h-4" />
+                <span className="sr-only">Support</span>
+              </Button>
             </div>
             <Button
               variant="link"

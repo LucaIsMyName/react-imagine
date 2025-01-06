@@ -211,7 +211,7 @@ const ImageArea: React.FC = () => {
           </div>
         ) : (
           <div className="relative w-full h-full md:flex md:items-center justify-center">
-            <div className="md:absolute -mt-4 mb-4 md:mb-0 top-2 -left-2 flex gap-0 p-2 justify-between bg-background z-20 md:rounded-lg rounded-b-lg shadow-sm backdrop-saturate-50 border">
+            <div className="md:absolute w-auto -mt-4 mb-4 md:mb-0 top-2 -left-2 -right-2 flex gap-0 p-2 justify-between bg-background z-20 md:rounded-lg rounded-b-lg shadow-sm backdrop-saturate-50 border">
               <section className="absolute inset-0 md:bg-gradient-to-b from-muted/10 shadow-inner md:shadow-none to-transparent"></section>
               <div className="flex items-center gap-2 pr-4 mr-4 border-r">
                 <Button

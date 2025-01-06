@@ -42,22 +42,30 @@ export const DocWindow: React.FC = () => {
 
     const fetchContent = async () => {
       try {
-        const url = state.content === "help" ? "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/public/docs/support.md" : state.content === "payment" ? "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/public/docs/support.md" : "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/README.md";
-        console.log("Fetching content from:", url);
+        let url;
+        switch (state.content) {
+          case "help":
+            url = "/docs/help.md";
+            break;
+          case "payment":
+            url = "/docs/support.md";
+            break;
+          case "docs":
+          default:
+            url = "https://raw.githubusercontent.com/LucaIsMyName/react-imagine/main/react-image/README.md";
+        }
 
         const response = await fetch(url);
-        console.log("Fetch response:", response);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const text = await response.text();
-        console.log("Fetched content length:", text.length);
         setContent(text);
       } catch (error) {
         console.error("Failed to fetch content:", error);
-        setContent(`Failed to load content. Error: ${error.message}`);
+        setContent(`# Error\nFailed to load content. Please try again later.`);
       }
     };
 
@@ -159,7 +167,9 @@ export const DocWindow: React.FC = () => {
         <section className="absolute inset-0 bg-gradient-to-b from-background/60 to-transparent" />
         <div className="flex items-center gap-2 z-10">
           <GripVertical className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-medium">{state.content === "help" ? "Help Guide" : "Documentation"}</span>
+          <span className="text-sm font-medium">
+            <span className="text-sm font-medium">{state.content === "help" ? "Help Guide" : state.content === "payment" ? "Support" : "Documentation"}</span>
+          </span>
         </div>
         <Button
           variant="outline"
@@ -249,13 +259,14 @@ export const DocWindow: React.FC = () => {
             ),
             a: ({ node, ...props }) => (
               <a
-                className="text-blue-500 underline"
+                target="_blank"
+                className="text-foreground underline-4 underline-offset-4 underline"
                 {...props}
               />
             ),
             img: ({ node, ...props }) => (
               <img
-                className="my-4"
+                className="my-4 max-w-64 w-full h-auto"
                 {...props}
               />
             ),
