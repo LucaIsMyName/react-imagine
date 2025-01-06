@@ -1,16 +1,36 @@
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { Moon, Sun, FolderOpen, Link } from "lucide-react";
+import { Moon, Sun, FolderOpen, Link, HelpCircle, FileText } from "lucide-react";
+import { useDocWindow } from "../../contexts/DocWindowContext";
 import Logo from "./Logo";
 import FileBrowserDialog from "../FileBrowser/FileBrowserDialog";
-import URLInputDialog from "../URLInput/URLInputDialog";
+import URLInputDialog from "../UrlInput/UrlInputDialog";
 import { Button } from "@/components/ui/button";
 
 const GlobalSettings: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { dispatch } = useDocWindow();
+
+  const handleHelpClick = () => {
+    console.log("Help click - Before dispatch"); // Add this log
+    dispatch({ 
+      type: "TOGGLE_WINDOW", 
+      payload: "help"
+    });
+    console.log("Help click - After dispatch"); // Add this log
+  };
+  
+  const handleDocsClick = () => {
+    console.log("Docs click - Before dispatch"); // Add this log
+    dispatch({ 
+      type: "TOGGLE_WINDOW", 
+      payload: "docs"
+    });
+    console.log("Docs click - After dispatch"); // Add this log
+  };
 
   return (
-    <header className="border-b absolute top-0 left-0 w-full shadow-inner">
+    <header className="border-b fixed top-0 left-0 w-full shadow-inner">
       <div className="mx-auto px-4 py-4 flex justify-between items-center">
         <h1 className="flex-1 text-2xl font-bold flex gap-4 items-center truncate">
           <div className="hidden md:block">
@@ -25,6 +45,25 @@ const GlobalSettings: React.FC = () => {
         </h1>
 
         <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mr-2 pr-4 border-r">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={handleHelpClick}>
+              <HelpCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">Help</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={handleDocsClick}>
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Docs</span>
+            </Button>
+          </div>
+
           <FileBrowserDialog>
             <Button
               variant="outline"
@@ -44,6 +83,7 @@ const GlobalSettings: React.FC = () => {
               <span className="hidden sm:inline">URL</span>
             </Button>
           </URLInputDialog>
+
           <div className="ml-2 pl-4 border-l">
             <Button
               onClick={toggleTheme}

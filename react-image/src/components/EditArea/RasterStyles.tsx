@@ -63,8 +63,8 @@ const RasterStyles: React.FC<RasterStylesProps> = ({ style, granularity, randomn
   ];
 
   return (
-    <div className="space-y-2 px-2 pt-1 pb-2 shadow-sm bg-background-muted rounded-lg border">
-      <label className="text-sm font-medium">Raster Style</label>
+    <div className="space-y-2 p-2 shadow-sm bg-background-muted rounded-lg border">
+      <label className="text-base font-medium">Raster Style</label>
 
       {/* Style Buttons */}
       <div className="flex gap-2 flex-wrap">
@@ -82,7 +82,7 @@ const RasterStyles: React.FC<RasterStylesProps> = ({ style, granularity, randomn
       </div>
 
       {style !== "none" && (
-        <div className="space-y-4 p-2 rounded-md border mt-8">
+        <div className="space-y-4 p-2 py-4 bg-muted/20 rounded-md border mt-8">
           <div className="space-y-2">
             <SliderLabel
               label="Granularity"

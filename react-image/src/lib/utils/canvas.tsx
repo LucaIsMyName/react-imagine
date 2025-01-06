@@ -1,4 +1,3 @@
-// src/lib/utils/canvas.ts
 import { applyCubismEffect } from "../effects/cubism";
 import { applyPointillismEffect } from "../effects/pointillism";
 import { applyModernEffect } from "../effects/modern";
@@ -6,19 +5,13 @@ import { applyAbstractEffect } from "../effects/abstract";
 import { applyRasterEffect } from "../effects/raster";
 import type { FilterSettings } from "@/types/editor-types";
 
-// Helper function to reset canvas context state
 const resetCanvasContext = (ctx: CanvasRenderingContext2D) => {
   ctx.globalAlpha = 1;
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.filter = 'none';
+  ctx.globalCompositeOperation = "source-over";
+  ctx.filter = "none";
 };
 
-export async function createProcessedCanvas(
-  originalImage: string, 
-  filterSettings: FilterSettings, 
-  targetWidth?: number, 
-  targetHeight?: number
-): Promise<HTMLCanvasElement> {
+export async function createProcessedCanvas(originalImage: string, filterSettings: FilterSettings, targetWidth?: number, targetHeight?: number): Promise<HTMLCanvasElement> {
   // Create new image from source
   const img = new Image();
   await new Promise((resolve) => {
@@ -82,7 +75,10 @@ export async function createProcessedCanvas(
 
     const selectedEffect = effectMap[filterSettings.artStyle as keyof typeof effectMap];
     if (selectedEffect) {
-      selectedEffect(ctx, tempCanvas, width, height);
+      selectedEffect(ctx, tempCanvas, width, height, {
+        granularity: filterSettings.artGranularity,
+        randomness: filterSettings.artRandomness,
+      });
     } else {
       // If no effect applied, copy back the filtered image
       ctx.drawImage(tempCanvas, 0, 0);
@@ -92,7 +88,7 @@ export async function createProcessedCanvas(
     ctx.drawImage(tempCanvas, 0, 0);
   }
 
-  // If we're going to apply raster effects, we need to save the current state
+  // Apply raster effects if selected
   if (filterSettings.rasterStyle !== "none") {
     // Create a new temp canvas for raster effect
     const rasterCanvas = document.createElement("canvas");
@@ -110,17 +106,10 @@ export async function createProcessedCanvas(
     resetCanvasContext(ctx);
 
     // Apply raster effect
-    applyRasterEffect(
-      ctx,
-      rasterCanvas,
-      width,
-      height,
-      filterSettings.rasterStyle as 'dots' | 'lines-horizontal' | 'lines-vertical',
-      {
-        granularity: filterSettings.rasterGranularity,
-        randomness: filterSettings.rasterRandomness
-      }
-    );
+    applyRasterEffect(ctx, rasterCanvas, width, height, filterSettings.rasterStyle as "dots" | "lines-horizontal" | "lines-vertical", {
+      granularity: filterSettings.rasterGranularity,
+      randomness: filterSettings.rasterRandomness,
+    });
   }
 
   // Final reset of canvas state
