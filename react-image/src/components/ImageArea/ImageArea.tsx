@@ -170,20 +170,20 @@ const ImageArea: React.FC = () => {
       <div className={`h-full w-full flex items-center justify-center ${!state.image ? "border-2 border-dashed border-border" : ""} rounded-lg relative`}>
         {!state.image ? (
           <div className="text-center space-y-6">
-            <div className="flex flex-col gap-4 items-center">
+            <div className="flex flex-col gap-4 items-center mx-4">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex flex-col items-center gap-2 p-6 rounded-lg hover:bg-accent">
+                className="flex w-full flex-col border-2 items-center gap-2 p-4 rounded-lg hover:bg-background">
                 <Upload className="w-8 h-8" />
-                <span className="text-sm">Upload image</span>
+                <span className="text-sm font-mono">Upload image</span>
               </button>
 
-              <div className="flex gap-2">
+              <div className="md:flex space-y-4 md:space-y-0 gap-2">
                 <FileBrowserDialog>
                   <Button
                     variant="outline"
-                    size="sm"
-                    className="gap-2">
+                    
+                    className="gap-2 w-full">
                     <FolderOpen className="w-4 h-4" />
                     Browse Files
                   </Button>
@@ -192,8 +192,8 @@ const ImageArea: React.FC = () => {
                 <URLInputDialog>
                   <Button
                     variant="outline"
-                    size="sm"
-                    className="gap-2">
+                    
+                    className="gap-2 w-full">
                     <Link className="w-4 h-4" />
                     From URL
                   </Button>
@@ -211,27 +211,34 @@ const ImageArea: React.FC = () => {
           </div>
         ) : (
           <div className="relative w-full h-full md:flex md:items-center justify-center">
-            <div className="absolute top-0 right-0 flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => dispatch({ type: "UNDO" })}
-                disabled={!canUndo}
-                className="flex items-center gap-2 px-3">
-                <Undo className="w-4 h-4" />
-                <span className="sr-only">Undo</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => dispatch({ type: "REDO" })}
-                disabled={!canRedo}
-                className="flex items-center gap-2 px-3">
-                <Redo className="w-4 h-4" />
-                <span className="sr-only">Redo</span>
-              </Button>
+            <div className="md:absolute -mt-4 mb-4 md:mb-0 top-2 -left-2 flex gap-2 p-2 justify-between bg-background z-20 md:rounded-lg rounded-b-lg shadow-sm backdrop-saturate-50 border">
+              
+              <section className="absolute inset-0 md:bg-gradient-to-b from-muted/10 shadow-inner md:shadow-none to-transparent"></section>
+              <div className="flex items-center gap-3 pr-4 mr-4 border-r">
+                <Button
+                  variant="outline"
+                  
+                  onClick={() => dispatch({ type: "UNDO" })}
+                  disabled={!canUndo}
+                  className="flex items-center gap-2 px-2 text-xs">
+                  <Undo className="w-4 h-4" />
+                  <span className="sr-only">Undo</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  
+                  onClick={() => dispatch({ type: "REDO" })}
+                  disabled={!canRedo}
+                  className="flex items-center gap-2 px-2">
+                  <Redo className="w-4 h-4" />
+                  <span className="sr-only">Redo</span>
+                </Button>
+              </div>
               <Button
                 variant="destructive"
+                
                 onClick={handleDeleteImage}
-                className="flex items-center gap-2 px-3">
+                className="flex items-center gap-2 px-2">
                 <Trash2 className="w-4 h-4" />
                 <span className="sr-only">Delete</span>
               </Button>

@@ -2,7 +2,7 @@ import React from "react";
 import { Slider } from "@/components/ui/slider";
 import { useEditor } from "../../contexts/EditorContext";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Settings2 } from "lucide-react";
 import ExportDialog from "../ExportDialog/ExportDialog";
 import SliderLabel from "./SliderLabel";
 import MetadataSection from "./MetadataSection";
@@ -102,10 +102,10 @@ const EditArea: React.FC = () => {
   }
 
   return (
-    <div className="p-4 space-y-6 md:shadow-inner">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Settings</h2>
-        <div className="flex gap-2">
+    <div className=" space-y-6 md:shadow-inner bg-muted/10 h-full overflow-y-scroll">
+      <div className="p-4 flex items-center bg-background/70 z-30 border-b sticky top-0 left-0 w-full backdrop-blur-lg items-center justify-between">
+        <h2 className="text-base font-semibold">Settings</h2>
+        <div className="flex gap-2 items-center">
           <Button
             variant="outline"
             onClick={() => dispatch({ type: "RESET_FILTERS" })}
@@ -118,7 +118,7 @@ const EditArea: React.FC = () => {
       </div>
 
       {/* Basic Adjustments */}
-      <div className="space-y-6">
+      <div className="space-y-6 overflow-y-auto p-4 pt-0">
         <TransformControls
           cropMode={state.cropSettings.mode}
           rotationMode={state.rotationSettings.mode}
@@ -130,8 +130,11 @@ const EditArea: React.FC = () => {
           onResetRotation={handleResetRotation}
         />
         {/* Base Filters */}
-        <div className="space-y-4 p-2 pb-4 rounded border bg-background-muted rounded-md shadow-sm">
-          <h3 className="text-base font-medium">Base Filters</h3>
+        <div className="space-y-4 p-2 pb-4 rounded border bg-background rounded-md shadow-sm">
+          <div className="flex gap-2 items-center">
+            <Settings2 className="w-4 h-4 text-muted-foreground" />
+            <h3 className="text-base font-medium">Base Filters</h3>
+          </div>
           {/* Brightness Slider */}
           <div className="space-y-2 ">
             <SliderLabel

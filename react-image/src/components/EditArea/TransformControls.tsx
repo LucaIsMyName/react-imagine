@@ -37,10 +37,10 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
   return (
     <div className="space-y-6">
       {/* Crop Controls */}
-      <div className="space-y-4 p-2 pb-4 rounded border bg-background-muted rounded-md shadow-sm">
+      <div className="space-y-4 p-2 pb-4 rounded border bg-background-muted rounded-md shadow-sm bg-background">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-medium flex items-center gap-2">
-            <Crop className="w-4 h-4" />
+            <Crop className="w-4 h-4 text-muted-foreground" />
             Crop
           </h3>
           {cropMode !== "none" && (
@@ -48,40 +48,37 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
               variant="ghost"
               size="sm"
               onClick={onResetCrop}
-              className="h-8 px-2">
-              <X className="w-4 h-4" />
+              className="h-6 px-1.5">
+              <X className="w-3 h-3" />
             </Button>
           )}
         </div>
 
         <div className="flex flex-wrap gap-2">
           {cropModes.map(({ value, icon, label }) => (
-            <Button
+            <button
               key={value}
-              variant={cropMode === value ? "default" : "outline"}
-              size="sm"
               onClick={() => onCropModeChange(value)}
-              className="flex items-center gap-2 px-2 py-0 pr-3 rounded-full text-[10px] lg:text-[10px]">
+              className="flex rounded-full border items-center gap-2 p-1 px-2 pr-3 text-[10px] lg:text-[10px] shadow-sm">
               {icon}
               <span className="">{label}</span>
-            </Button>
+            </button>
           ))}
         </div>
       </div>
 
       {/* Rotation Controls */}
-      <div className="space-y-4 p-2 pb-4 rounded border bg-background-muted rounded-md shadow-sm">
+      <div className="space-y-4 p-2 pb-4 rounded border bg-background rounded-md shadow-sm">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-medium flex items-center gap-2">
-            <RotateCw className="w-4 h-4" />
+          <RotateCw className="w-4 h-4 text-muted-foreground" />
             Rotate
           </h3>
           {rotationMode !== "none" && (
             <Button
               variant="outline"
-              size="sm"
               onClick={onResetRotation}
-              className=" gap-2 px-2 py-[0em] pr-3 rounded-full text-[10px] lg:text-[10px]">
+              className=" gap-2 px-2 py-[0em] shadow-sm pr-3 rounded-full text-[10px] lg:text-[10px]">
               <X className="w-4 h-4" />
             </Button>
           )}
@@ -89,15 +86,16 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
 
         <div className="flex flex-wrap gap-2">
           {rotationModes.map(({ value, angle, label }) => (
-            <Button
+            <button
               key={value}
-              variant={rotationMode === value ? "default" : "outline"}
-              size="sm"
               onClick={() => onRotationModeChange(value, angle)}
-              className="flex items-center gap-2">
-              <RotateCw className="w-4 h-4" />
-              <span className="text-xs">{label}</span>
-            </Button>
+              className="flex rounded-full border items-center gap-2 p-1 px-2 pr-3 text-[10px] lg:text-[10px] shadow-sm">
+              <RotateCw className="w-3 h-3"
+              style={{
+                transform: `rotate(${angle}deg)`,
+              }} />
+              <span className="">{label}</span>
+            </button>
           ))}
         </div>
 

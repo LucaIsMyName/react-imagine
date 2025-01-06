@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { Moon, Sun, FolderOpen, Link, HelpCircle, FileText } from "lucide-react";
+import { Moon, Sun, FolderOpen, Github, Link, HelpCircle, FileText } from "lucide-react";
 import { useDocWindow } from "../../contexts/DocWindowContext";
 import Logo from "./Logo";
 import FileBrowserDialog from "../FileBrowser/FileBrowserDialog";
@@ -44,8 +44,15 @@ const GlobalSettings: React.FC = () => {
           </div>
         </h1>
 
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 mr-2 pr-2 border-r">
+        <div className="flex items-center gap-2 h-full">
+          <div className="flex items-center gap-2 mr-2 pr-2 border-r h-full">
+            <div className="hidden sm:flex items-center gap-1 pr-6 border-r h-full py-2">
+              <a
+                href="https://github.com/LucaIsMyName/react-imagine/tree/main/react-image"
+                target="_blank">
+                <Github className="w-4 h-4" />
+              </a>
+            </div>
             <Button
               variant="link"
               size="sm"

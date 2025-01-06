@@ -2,8 +2,9 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { CircleX as NoneIcon, Boxes as CubismIcon, Grip as PointillismIcon, BrickWall as ModernIcon, Eclipse as AbstractIcon, Paintbrush as RenaissanceIcon } from "lucide-react";
+import { Palette, CircleX as NoneIcon, Boxes as CubismIcon, Grip as PointillismIcon, BrickWall as ModernIcon, Eclipse as AbstractIcon, Paintbrush as RenaissanceIcon } from "lucide-react";
 import SliderLabel from "./SliderLabel";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ArtStylesProps {
   style: string;
@@ -87,8 +88,11 @@ const ArtStyles: React.FC<ArtStylesProps> = ({ style, granularity, randomness, o
   ];
 
   return (
-    <div className="space-y-2 p-2 shadow-sm bg-background-muted rounded-lg border">
-      <label className="text-base font-medium">Art Style</label>
+    <div className="space-y-2 p-2 shadow-sm bg-background rounded-lg border">
+      <div className="flex gap-2 items-center mb-4">
+        <Palette className="size-4 text-muted-foreground" />
+        <label className="text-base font-medium">Art Style</label>
+      </div>
 
       {/* Style Buttons */}
       <div className="flex gap-2 flex-wrap">
@@ -105,44 +109,50 @@ const ArtStyles: React.FC<ArtStylesProps> = ({ style, granularity, randomness, o
           </Button>
         ))}
       </div>
+      <AnimatePresence>
+        {style !== "none" && (
+          <motion.div
+            initial={{ opacity: 1, height: 0, overflowY: "hidden" }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 1, height: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-4 p-2 py-4 pt-2 bg-muted/20 rounded-md border mt-8">
+            <div className="space-y-2">
+              <SliderLabel
+                label="Granularity"
+                value={granularity}
+                onChange={onGranularityChange}
+                min={0}
+                max={100}
+              />
+              <Slider
+                value={[granularity]}
+                onValueChange={([value]) => onGranularityChange(value)}
+                min={0}
+                max={100}
+                step={1}
+              />
+            </div>
 
-      {style !== "none" && (
-        <div className="space-y-4 p-2 py-4 bg-muted/20 rounded-md border mt-8">
-          <div className="space-y-2">
-            <SliderLabel
-              label="Granularity"
-              value={granularity}
-              onChange={onGranularityChange}
-              min={0}
-              max={100}
-            />
-            <Slider
-              value={[granularity]}
-              onValueChange={([value]) => onGranularityChange(value)}
-              min={0}
-              max={100}
-              step={1}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <SliderLabel
-              label="Randomness"
-              value={randomness}
-              onChange={onRandomnessChange}
-              min={0}
-              max={100}
-            />
-            <Slider
-              value={[randomness]}
-              onValueChange={([value]) => onRandomnessChange(value)}
-              min={0}
-              max={100}
-              step={1}
-            />
-          </div>
-        </div>
-      )}
+            <div className="space-y-2">
+              <SliderLabel
+                label="Randomness"
+                value={randomness}
+                onChange={onRandomnessChange}
+                min={0}
+                max={100}
+              />
+              <Slider
+                value={[randomness]}
+                onValueChange={([value]) => onRandomnessChange(value)}
+                min={0}
+                max={100}
+                step={1}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -170,9 +170,9 @@ export const DocWindow: React.FC = () => {
       </div>
 
       {/* Window Content */}
-      <div className="flex-1 overflow-auto p-4 min-h-[400px]">
+      <div className="flex-1 overflow-auto p-4 min-h-[400px] ">
         <ReactMarkdown
-          className="prose dark:prose-invert max-w-none"
+          className="prose dark:prose-invert max-w-none select-text"
           components={{
             h1: ({ node, ...props }) => (
               <h1
@@ -267,9 +267,9 @@ export const DocWindow: React.FC = () => {
       {/* Resize Handle */}
       <div
         ref={resizeRef}
-        className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize hover:bg-muted/50 transition-colors"
+        className="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize hover:bg-muted/20 transition-colors"
         style={{
-          background: "linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.2) 50%)",
+          background: "linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.0.7) 50%)",
         }}
       />
     </div>

@@ -12,7 +12,7 @@ import DocWindow from "./components/DocWindow/DocWindow";
 
 if (typeof window !== "undefined") {
   scan({
-    enabled: false,
+    enabled: true,
     log: false,
   });
 }
