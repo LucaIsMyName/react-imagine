@@ -1,5 +1,7 @@
 # React Imagine Editor
 
+**this app is in active development, some or many features might not work as expected**
+
 A modern, responsive image editor built with React, TypeScript, and Tailwind CSS. Transform your images with artistic filters, basic adjustments, and preserve metadata * all in your browser with no server uploads required.
 
 ## Features
@@ -159,19 +161,18 @@ Available effects:
 * [ ] Add image resize functionality
 * [ ] Implement undo/redo history
 * [ ] Add keyboard shortcuts
+* [ ] Add Drag'n'Drop for Blank `<ImageArea />`
 * [ ] Optimize performance for large images
-* [ ] Add more art filters
-* [ ] Implement batch processing
-* [ ] Add export presets
+  * [ ] might be better to NOT load them into local storage as Base64
+* [ ] Add more art filters and fix the current ones
+  * [ ] Pointillism: Good
+  * [ ] Modern: Bad
+  * [ ] Cubism: Bad
+* [ ] Make Granularity and Randomness Slider work in Art Filters
+* [ ] Add more export options and presets
 * [ ] Improve mobile touch interactions
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/new-feature`
-3. Commit your changes: `git commit -am 'Add new feature'`
-4. Push to the branch: `git push origin feature/new-feature`
-5. Submit a pull request
+* [ ] Remove unnecessary Re-Rendering of Components (`memo` & `useMemo()`)
+* [ ] Consider implementing React-Compiler for better Perfoamnce
 
 ## License
 

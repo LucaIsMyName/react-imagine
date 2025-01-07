@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { RotateCw, Crop, Square, RectangleHorizontal, MonitorSmartphone, MonitorPlay, Maximize, X } from "lucide-react";
 import SliderLabel from "./SliderLabel";
+import Badge from "@/components/ui/badge";
 import type { CropMode, RotationMode } from "@/types/editor-types";
 
 interface TransformControlsProps {
@@ -41,7 +42,10 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
         <div className="flex items-center justify-between">
           <h3 className="text-base font-medium flex items-center gap-2">
             <Crop className="w-4 h-4 text-muted-foreground" />
-            Crop
+            <div className="flex gap-2 items-center">
+              Crop
+              <Badge variant="light">Not Working</Badge>
+            </div>
           </h3>
           {cropMode !== "none" && (
             <Button
@@ -71,8 +75,9 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
       <div className="space-y-4 p-2 pb-4 rounded border bg-background rounded-md shadow-sm">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-medium flex items-center gap-2">
-          <RotateCw className="w-4 h-4 text-muted-foreground" />
+            <RotateCw className="w-4 h-4 text-muted-foreground" />
             Rotate
+            <Badge variant="light">Not Working</Badge>
           </h3>
           {rotationMode !== "none" && (
             <Button
@@ -90,10 +95,12 @@ const TransformControls: React.FC<TransformControlsProps> = ({ cropMode, rotatio
               key={value}
               onClick={() => onRotationModeChange(value, angle)}
               className="flex rounded-full border items-center gap-2 p-1 px-2 pr-3 text-[10px] lg:text-[10px] shadow-sm">
-              <RotateCw className="w-3 h-3"
-              style={{
-                transform: `rotate(${angle}deg)`,
-              }} />
+              <RotateCw
+                className="w-3 h-3"
+                style={{
+                  transform: `rotate(${angle}deg)`,
+                }}
+              />
               <span className="">{label}</span>
             </button>
           ))}
